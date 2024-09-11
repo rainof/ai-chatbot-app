@@ -4,6 +4,7 @@ import "./App.css";
 function App() {
   const [prompt, setPrompt] = useState("");
   const [conversation, setConversation] = useState([]);
+
   const handleSend = async () => {
     if (prompt.trim()) {
       const userMessage = { sender: "user", message: prompt };
