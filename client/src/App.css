@@ -1,0 +1,28 @@
+body {
+    margin: 0;
+}
+
+.app-container {
+    background-color: cornsilk;
+    height: 100vh;
+}
+
+header {
+    padding: 1rem;
+}
+
+.main-container {
+    padding: 0 1rem;
+    display: flex;
+    gap: 2rem;
+}
+
+nav {
+    background-color: lightgray;
+    padding: 1rem;
+}
+
+.chat-container {
+    background-color: lightgray;
+    padding: 1rem;
+}
