@@ -19,9 +19,10 @@ function App() {
       });
 
       const data = await response.json();
+      console.log(data);
       const aiMessage = {
         sender: "ai",
-        message: data.input + "++++" + data.output,
+        message: data.response,
       };
 
       setConversation([...conversation, userMessage, aiMessage]);

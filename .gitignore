@@ -23,3 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 /server/src/__pycache__
+
+/server/openai_api_key.txt
