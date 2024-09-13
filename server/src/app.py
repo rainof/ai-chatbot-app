@@ -49,3 +49,8 @@ async def request_chatgpt(request: ChatRequestSchema):
     )
     message = response["choices"][0]["message"]["content"].strip()
     return {"response": message}
+
+
+@app.post("/chat-test")
+def test_response(request: ChatRequestSchema):
+    return {"response": f"Test response to prompt: {request.prompt}"}
