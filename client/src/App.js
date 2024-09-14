@@ -3,39 +3,66 @@ import "./App.css";
 
 function App() {
   const [prompt, setPrompt] = useState("");
-  const [conversation, setConversation] = useState([]);
-  const [showNewChat, setShowNewChat] = useState([]);
+  const [chats, setChats] = useState([]);
+  const [activeChatId, setActiveChatId] = useState(null);
 
-  const handleNewChatClick = () => {
-    // setShowNewChat(true);
-    setShowNewChat((prev) => [...prev, `Chat ${prev.length + 1}`]);
+  const startNewChat = async () => {
+    const response = await fetch("http://localhost:8000/start-chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    return data.chatId;
   };
 
   const handleSend = async () => {
     if (prompt.trim()) {
       const userMessage = { sender: "user", message: prompt };
-      // setConversation([...conversation, userMessage]);
-      setConversation((prev) => [...prev, userMessage]);
+      let chatId = activeChatId;
+
+      if (!chatId) {
+        chatId = await startNewChat();
+        setActiveChatId(chatId);
+        setChats((prevChats) => [
+          ...prevChats,
+          { id: chatId, messages: [userMessage] },
+        ]);
+      } else {
+        setChats((prevChats) =>
+          prevChats.map((chat) =>
+            chat.id === chatId
+              ? { ...chat, messages: [...chat.messages, userMessage] }
+              : chat
+          )
+        );
+      }
 
       const response = await fetch("http://localhost:8000/chat-test", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt: prompt }),
+        body: JSON.stringify({ chatId, prompt }),
       });
 
       const data = await response.json();
-      console.log(data);
-      const aiMessage = {
-        sender: "ai",
-        message: data.response,
-      };
+      const aiMessage = { sender: "ai", message: data.response };
 
-      // setConversation([...conversation, userMessage, aiMessage]);
-      setConversation((prev) => [...prev, userMessage, aiMessage]);
+      setChats((prevChats) =>
+        prevChats.map((chat) =>
+          chat.id === chatId
+            ? { ...chat, messages: [...chat.messages, aiMessage] }
+            : chat
+        )
+      );
       setPrompt("");
     }
+  };
+
+  const handleNewChatClick = () => {
+    setActiveChatId(null);
   };
 
   return (
@@ -46,21 +73,28 @@ function App() {
       <div className="main-container">
         <nav>
           Previous chat
-          <div className="chat-history">{/* TBA */}</div>
-          {showNewChat.map((chat, index) => (
-            <div key={index} className="chat-item">
-              {chat}
-            </div>
-          ))}
+          <div className="chat-history">
+            {chats.map((chat) => (
+              <div
+                key={chat.id}
+                className="chat-item"
+                onClick={() => setActiveChatId(chat.id)}
+              >
+                Chat {chat.id}
+              </div>
+            ))}
+          </div>
         </nav>
         <div className="chat-container">
           Conversation
           <div className="chat-area">
-            {conversation.map((msg, index) => (
-              <div key={index} className={`message ${msg.sender}`}>
-                {msg.message}
-              </div>
-            ))}
+            {chats
+              .find((chat) => chat.id === activeChatId)
+              ?.messages.map((msg, index) => (
+                <div key={index} className={`message ${msg.sender}`}>
+                  {msg.message}
+                </div>
+              ))}
           </div>
           <label>Prompt: </label>
           <input
