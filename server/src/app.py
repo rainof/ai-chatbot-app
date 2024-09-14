@@ -3,6 +3,11 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from schema import ChatRequestSchema
+from uuid import uuid4
+
+
+# Dictionary to store chat history for each user
+chats = {}
 
 # Initialize FastAPI application
 app = FastAPI()
@@ -22,11 +27,9 @@ with open("openai_api_key.txt", "r") as file:
 openai.api_key = api_key
 
 
-############
-
+################################################
 # Endpoints
-
-############
+################################################
 
 
 # Root endpoint to check if the server is running
@@ -53,4 +56,16 @@ async def request_chatgpt(request: ChatRequestSchema):
 
 @app.post("/chat-test")
 def test_response(request: ChatRequestSchema):
-    return {"response": f"Test response to prompt: {request.prompt}"}
+    chat_id = request.chatId
+    prompt = request.prompt
+    if chat_id not in chats:
+        raise HTTPException(status_code=404, detail="Chat not found")
+
+    return {"chatId": chat_id, "response": f"Test response to prompt: {request.prompt}"}
+
+
+@app.post("/start-chat")
+def start_chat():
+    chat_id = str(uuid4())
+    chats[chat_id] = []
+    return {"chatId": chat_id}
