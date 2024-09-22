@@ -36,9 +36,11 @@ const Chat = () => {
         <div className="error">Error: {error}</div>
       ) : (
         <div className="chat-history">
-          {messages.map((msg) => (
-            <div key={msg.id} className="chat-message">
-              <div>{msg.message}</div>
+          {messages.map((msg, index) => (
+            <div key={index} className="chat-message">
+              <div>
+                {msg.sender}: {msg.message}
+              </div>
             </div>
           ))}
         </div>
