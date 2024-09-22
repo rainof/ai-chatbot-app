@@ -38,6 +38,36 @@ def read_root():
     return {"Hello": "World"}
 
 
+# Endpoint to start a new chat
+@app.post("/start-chat")
+def start_chat():
+    chat_id = str(uuid4())
+    chats[chat_id] = []
+    return {"chatId": chat_id}
+
+
+# Endpoint to send a prompt to ChatGPT and get a response, saving it to chat history
+@app.post("/chat-test")
+def test_response(request: ChatRequestSchema):
+    chat_id = request.chatId
+    prompt = request.prompt
+    if chat_id not in chats:
+        raise HTTPException(status_code=404, detail="Chat not found")
+
+    return {"chatId": chat_id, "response": f"Test response to prompt: {request.prompt}"}
+
+
+# Endpoint to get chat history by chat id
+@app.get("/chat-test/{chat_id}")
+def get_chat_history(chat_id: str):
+    if chat_id not in chats:
+        raise HTTPException(status_code=404, detail="Chat not found")
+
+    print(f"Returning chat history for chat_id: {chat_id}")
+    print(chats[chat_id])
+    return {"chatId": chat_id, "messages": chats[chat_id]}
+
+
 # Endpoint to send a prompt to ChatGPT and get a response
 @app.post("/chat")
 async def request_chatgpt(request: ChatRequestSchema):
@@ -52,20 +82,3 @@ async def request_chatgpt(request: ChatRequestSchema):
     )
     message = response["choices"][0]["message"]["content"].strip()
     return {"response": message}
-
-
-@app.post("/chat-test")
-def test_response(request: ChatRequestSchema):
-    chat_id = request.chatId
-    prompt = request.prompt
-    if chat_id not in chats:
-        raise HTTPException(status_code=404, detail="Chat not found")
-
-    return {"chatId": chat_id, "response": f"Test response to prompt: {request.prompt}"}
-
-
-@app.post("/start-chat")
-def start_chat():
-    chat_id = str(uuid4())
-    chats[chat_id] = []
-    return {"chatId": chat_id}
