@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../styles/Home.scss";
 
 const Home = ({ handleSend, activeChatId, chats }) => {
   const [prompt, setPrompt] = useState("");

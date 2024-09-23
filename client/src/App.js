@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Chat from "./components/Chat";
 import Home from "./components/Home";
-import "./App.css";
+import "./App.scss";
 
 function App() {
   const [chats, setChats] = useState([]);

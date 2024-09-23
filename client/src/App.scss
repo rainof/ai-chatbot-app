@@ -1,0 +1,21 @@
+@import "./index.scss";
+
+
+body {
+    background: var(--forth-color);
+    font-family: "Ubuntu Mono";
+    color: var(--forth-color);
+
+    #root{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .App {
+            width: 70vw;
+            height: 80vh;
+            background-color: var(--first-color);
+            padding: 2rem;
+        }
+    }
+}

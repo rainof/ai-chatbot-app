@@ -1,0 +1,14 @@
+@import "../index.scss";
+
+
+button {
+    color: var(--first-color);
+    background-color: var(--forth-color);
+    cursor: pointer;
+    border-color: var(--forth-color);
+}
+
+button:hover {
+    color: var(--primary-color);
+    background-color: var(--second-color);
+}
