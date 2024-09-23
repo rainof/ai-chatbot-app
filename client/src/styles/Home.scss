@@ -1,14 +1,33 @@
 @import "../index.scss";
 
-
-button {
+.chat-container {
     color: var(--first-color);
     background-color: var(--forth-color);
-    cursor: pointer;
-    border-color: var(--forth-color);
+    padding: 1rem;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
 }
 
-button:hover {
-    color: var(--primary-color);
-    background-color: var(--second-color);
+.prompt-container {
+    display: flex;
+
+    #input-prompt {
+        width: 100%;
+    }
+
+    #submit-btn {
+        color: var(--first-color);
+        background-color: var(--forth-color);
+        cursor: pointer;
+        border-style: none;
+        border: var(--forth-color) 2px solid;
+        margin-left: 0.2rem;
+    }
+
+    #submit-btn:hover {
+        color: var(--primary-color);
+        background-color: var(--second-color);
+    }
 }

@@ -22,11 +22,11 @@ const Home = ({ handleSend, activeChatId, chats }) => {
   return (
     <>
       <h1>Welcome to the AI Chatbot App!</h1>
-      <div className="chat-history">
+      <div className="chat-container">
         {currentChat ? (
           currentChat.messages.length > 0 ? (
             currentChat.messages.map((msg, index) => (
-              <div key={index} className={`chat-message ${msg.sender}`}>
+              <div key={index} className={`chat-item ${msg.sender}`}>
                 {/* {msg.prompt} */}
                 {msg.message}
               </div>
@@ -38,13 +38,18 @@ const Home = ({ handleSend, activeChatId, chats }) => {
           <p>No active chat found. Please start a new chat.</p>
         )}
       </div>
-      <input
-        type="text"
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        placeholder="Type a message..."
-      />
-      <button onClick={onSend}>Send</button>
+      <div className="prompt-container">
+        <input
+          type="text"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          placeholder="Type a message..."
+          id="input-prompt"
+        />
+        <button id="submit-btn" onClick={onSend}>
+          Send
+        </button>
+      </div>
     </>
   );
 };

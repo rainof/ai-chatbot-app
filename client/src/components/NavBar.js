@@ -10,12 +10,12 @@ const NavBar = ({ chats, setActiveChatId }) => {
     <>
       <nav>
         Previous chat
-        <div className="chat-history">
+        <div className="nav-history">
           {uniqueChats.map((chat) => (
             <Link
               key={chat.id}
               to={`/c/${chat.id}`}
-              className="chat-item"
+              className="nav-item"
               onClick={() => setActiveChatId(chat.id)}
             >
               Chat {chat.id}

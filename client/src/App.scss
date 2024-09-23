@@ -2,17 +2,19 @@
 
 
 body {
+    margin: 0;
     background: var(--forth-color);
     font-family: "Ubuntu Mono";
     color: var(--forth-color);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     #root{
-        display: flex;
-        justify-content: center;
-        align-items: center;
 
         .App {
-            width: 70vw;
+            width: 490px;
             height: 80vh;
             background-color: var(--first-color);
             padding: 2rem;
