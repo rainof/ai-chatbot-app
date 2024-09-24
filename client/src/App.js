@@ -79,7 +79,13 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Layout chats={chats} setActiveChatId={setActiveChatId} />}
+            element={
+              <Layout
+                chats={chats}
+                setActiveChatId={setActiveChatId}
+                startNewChat={startNewChat}
+              />
+            }
           >
             <Route path="c/:chatId" element={<Chat />} />
             <Route

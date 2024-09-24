@@ -2,10 +2,14 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 
-const Layout = ({ chats, setActiveChatId }) => {
+const Layout = ({ chats, setActiveChatId, startNewChat }) => {
   return (
     <>
-      <NavBar chats={chats} setActiveChatId={setActiveChatId} />
+      <NavBar
+        chats={chats}
+        setActiveChatId={setActiveChatId}
+        startNewChat={startNewChat}
+      />
       <Outlet />
     </>
   );
