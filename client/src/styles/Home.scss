@@ -10,6 +10,12 @@
     gap: 0.3rem;
 }
 
+.chat-container.no-message {
+    color: var(--forth-color);
+    background-color: transparent;
+    padding: 0;
+}
+
 .prompt-container {
     display: flex;
 

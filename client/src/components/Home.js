@@ -22,7 +22,11 @@ const Home = ({ handleSend, activeChatId, chats }) => {
   return (
     <>
       <h1>Welcome to the AI Chatbot App!</h1>
-      <div className="chat-container">
+      <div
+        className={`chat-container ${
+          currentChat && currentChat.messages.length > 0 ? "" : "no-message"
+        }`}
+      >
         {currentChat ? (
           currentChat.messages.length > 0 ? (
             currentChat.messages.map((msg, index) => (
@@ -35,7 +39,7 @@ const Home = ({ handleSend, activeChatId, chats }) => {
             <p>No message yet. Start the conversation!</p>
           )
         ) : (
-          <p>No active chat found. Please start a new chat.</p>
+          <p>Please start the conversation!</p>
         )}
       </div>
       <div className="prompt-container">
