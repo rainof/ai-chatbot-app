@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./../styles/NavBar.scss";
 
 const NavBar = ({ chats, setActiveChatId, startNewChat }) => {
   const uniqueChats = chats.filter(
@@ -15,7 +16,9 @@ const NavBar = ({ chats, setActiveChatId, startNewChat }) => {
     <>
       <nav>
         <div className="nav-action">
-          <button onClick={handleNewChat}>New Chat</button>
+          <button id="new-chat-btn" onClick={handleNewChat}>
+            New Chat
+          </button>
         </div>
         Previous chat
         <div className="nav-history">

@@ -33,7 +33,8 @@
     }
 
     #submit-btn:hover {
-        color: var(--primary-color);
+        color: var(--forth-color);
         background-color: var(--second-color);
+        border: var(--second-color) 2px solid;
     }
 }

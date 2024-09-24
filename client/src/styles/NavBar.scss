@@ -1,0 +1,16 @@
+.nav-action {
+
+    #new-chat-btn {
+        color: var(--first-color);
+        background-color: var(--forth-color);
+        cursor: pointer;
+        border-style: none;
+        border: var(--forth-color) 2px solid;
+    }
+
+    #new-chat-btn:hover {
+        color: var(--forth-color);
+        background-color: var(--second-color);
+        border: var(--second-color) 2px solid;
+    }
+}
