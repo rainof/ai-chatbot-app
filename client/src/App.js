@@ -32,19 +32,30 @@ function App() {
       if (!chatId) {
         chatId = await startNewChat();
         setActiveChatId(chatId);
-        setChats((prevChats) => [
-          ...prevChats,
-          { id: chatId, messages: [userMessage] },
-        ]);
-      } else {
-        setChats((prevChats) =>
-          prevChats.map((chat) =>
-            chat.id === chatId
-              ? { ...chat, messages: [...chat.messages, userMessage] }
-              : chat
-          )
-        );
+        // setChats((prevChats) => [
+        //   ...prevChats,
+        //   { id: chatId, messages: [userMessage] },
+        // ]);
       }
+      // else {
+      //   setChats((prevChats) =>
+      //     prevChats.map((chat) =>
+      //       chat.id === chatId
+      //         ? { ...chat, messages: [...chat.messages, userMessage] }
+      //         : chat
+      //     )
+      //   );
+      // }
+
+      setChats((prev) =>
+        prev.some((chat) => chat.id === chatId)
+          ? prev.map((chat) =>
+              chat.id === chatId
+                ? { ...chat, messages: [...chat.messages, userMessage] }
+                : chat
+            )
+          : [...prev, { id: chatId, messages: [userMessage] }]
+      );
 
       const response = await fetch("http://localhost:8000/chat-test", {
         method: "POST",
@@ -62,8 +73,8 @@ function App() {
       const data = await response.json();
       const aiMessage = { sender: "ai", message: data.response };
 
-      setChats((prevChats) =>
-        prevChats.map((chat) =>
+      setChats((prev) =>
+        prev.map((chat) =>
           chat.id === chatId
             ? { ...chat, messages: [...chat.messages, aiMessage] }
             : chat
