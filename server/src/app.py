@@ -42,8 +42,13 @@ def read_root():
 @app.post("/start-chat")
 def start_chat():
     chat_id = str(uuid4())
-    chats[chat_id] = []
     return {"chatId": chat_id}
+
+
+# Endpoint to get list of chats
+@app.get("/get-chat-list")
+def get_chat_list():
+    return list(chats.keys())
 
 
 # Endpoint to send a prompt to ChatGPT and get a response, saving it to chat history
@@ -52,9 +57,18 @@ def test_response(request: ChatRequestSchema):
     chat_id = request.chatId
     prompt = request.prompt
     if chat_id not in chats:
-        raise HTTPException(status_code=404, detail="Chat not found")
-
-    return {"chatId": chat_id, "response": f"Test response to prompt: {request.prompt}"}
+        chats[chat_id] = [
+            {"role": "system", "content": "You are a supportive assistant."},
+        ]
+        # raise HTTPException(status_code=404, detail="Chat not found")
+    chats[chat_id].append({"role": "user", "content": request.prompt})
+    # chats[chat_id].append({"role": "assistant", "content": request.prompt})
+    print(chat_id, chats[chat_id])
+    return {
+        "chatId": chat_id,
+        "response": f"Test response to prompt: {chats[chat_id][-1]['content']}",
+        "history": chats[chat_id],
+    }
 
 
 # Endpoint to get chat history by chat id
