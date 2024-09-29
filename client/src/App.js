@@ -1,114 +1,30 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
-import Chat from "./components/Chat";
-import Home from "./components/Home";
+import Content from "./components/Content";
+
 import "./App.scss";
 
 function App() {
-  const [chats, setChats] = useState([]);
-  const [activeChatId, setActiveChatId] = useState(null);
-  const [prompt, setPrompt] = useState("");
-
   const startNewChat = async () => {
-    const response = await fetch("http://localhost:8000/start-chat", {
+    const response = await fetch("http://localhost:8000/new-chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
     });
-    const data = await response.json();
+    const data = response.json();
     const chatId = data.chatId;
-    setActiveChatId(chatId);
-    setChats([...chats, { id: chatId, messages: [] }]);
-    return chatId;
-  };
-
-  const handleSend = async (prompt) => {
-    if (prompt.trim()) {
-      const userMessage = { sender: "user", prompt: prompt };
-      let chatId = activeChatId;
-
-      if (!chatId) {
-        chatId = await startNewChat();
-        setActiveChatId(chatId);
-        // setChats((prevChats) => [
-        //   ...prevChats,
-        //   { id: chatId, messages: [userMessage] },
-        // ]);
-      }
-      // else {
-      //   setChats((prevChats) =>
-      //     prevChats.map((chat) =>
-      //       chat.id === chatId
-      //         ? { ...chat, messages: [...chat.messages, userMessage] }
-      //         : chat
-      //     )
-      //   );
-      // }
-
-      setChats((prev) =>
-        prev.some((chat) => chat.id === chatId)
-          ? prev.map((chat) =>
-              chat.id === chatId
-                ? { ...chat, messages: [...chat.messages, userMessage] }
-                : chat
-            )
-          : [...prev, { id: chatId, messages: [userMessage] }]
-      );
-
-      const response = await fetch("http://localhost:8000/chat-test", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // body: JSON.stringify({ chatId, message: prompt }),
-        body: JSON.stringify({ chatId, prompt }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const aiMessage = { sender: "ai", message: data.response };
-
-      setChats((prev) =>
-        prev.map((chat) =>
-          chat.id === chatId
-            ? { ...chat, messages: [...chat.messages, aiMessage] }
-            : chat
-        )
-      );
-      setPrompt("");
-    }
+    console.log("chatId:", chatId);
   };
 
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route
-            path="/"
-            element={
-              <Layout
-                chats={chats}
-                setActiveChatId={setActiveChatId}
-                startNewChat={startNewChat}
-              />
-            }
-          >
-            <Route path="c/:chatId" element={<Chat />} />
-            <Route
-              index
-              element={
-                <Home
-                  handleSend={handleSend}
-                  activeChatId={activeChatId}
-                  chats={chats}
-                />
-              }
-            />
+          <Route path="/" element={<Layout />}>
+            <Route path="c/:chatId" element={<Content />} />
+            <Route path="new-chat" element={<Content />} />
           </Route>
         </Routes>
       </div>

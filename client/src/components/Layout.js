@@ -1,18 +1,16 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
-import NavBar from "./NavBar";
+import TopBar from "./TopBar";
+import Content from "./Content";
+import InputField from "./InputField";
 
-const Layout = ({ chats, setActiveChatId, startNewChat }) => {
+function Layout({ startNewChat }) {
   return (
     <>
-      <NavBar
-        chats={chats}
-        setActiveChatId={setActiveChatId}
-        startNewChat={startNewChat}
-      />
-      <Outlet />
+      <TopBar startNewChat={startNewChat} />
+      <Content />
+      <InputField />
     </>
   );
-};
+}
 
 export default Layout;
