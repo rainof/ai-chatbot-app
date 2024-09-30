@@ -37,3 +37,14 @@ openai.api_key = api_key
 def new_chat():
     chat_id = str(uuid4())
     return {"chatId": chat_id}
+
+
+@app.get("/chats/{chat_id}")
+def get_chat(chat_id: str):
+    if chat_id not in chats:
+        raise HTTPException(status_code=404, detail="Chat not found")
+
+    print(f"Returning chat history for chat_id:", {chat_id})
+    print("Chat:", chats(chat_id))
+
+    return {"chatId": chat_id, "messages": chats[chat_id]}
