@@ -25,7 +25,9 @@ function Content() {
           ))}
         </div>
       ) : (
-        <p>Loading chat...</p>
+        <div className="">
+          <p>Loading chat...</p>
+        </div>
       )}
     </>
   );
