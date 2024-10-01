@@ -3,11 +3,11 @@ import TopBar from "./TopBar";
 import Content from "./Content";
 import InputField from "./InputField";
 
-function Layout({ startNewChat, handleSend }) {
+function Layout({ chats, activeChatId, startNewChat, handleSend }) {
   return (
     <>
       <TopBar startNewChat={startNewChat} />
-      <Content />
+      <Content chats={chats} activeChatId={activeChatId} />
       <InputField handleSend={handleSend} />
     </>
   );

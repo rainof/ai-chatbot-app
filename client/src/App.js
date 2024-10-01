@@ -57,11 +57,22 @@ function App() {
           <Route
             path="/"
             element={
-              <Layout startNewChat={startNewChat} handleSend={handleSend} />
+              <Layout
+                chats={chats}
+                activeChatId={activeChatId}
+                startNewChat={startNewChat}
+                handleSend={handleSend}
+              />
             }
           >
-            <Route path="c/:chatId" element={<Content />} />
-            <Route path="new-chat" element={<Content />} />
+            <Route
+              path="c/:chatId"
+              element={<Content chats={chats} activeChatId={activeChatId} />}
+            />
+            <Route
+              path="new-chat"
+              element={<Content chats={chats} activeChatId={activeChatId} />}
+            />
           </Route>
         </Routes>
       </div>
