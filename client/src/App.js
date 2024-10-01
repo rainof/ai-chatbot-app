@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Content from "./components/Content";
@@ -6,6 +6,7 @@ import Content from "./components/Content";
 import "./App.scss";
 
 function App() {
+  const [chats, setChats] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
 
   const startNewChat = async () => {
@@ -17,7 +18,6 @@ function App() {
     });
     const data = await response.json();
     const chatId = data.chatId;
-    console.log("chatId:", chatId);
     return chatId;
   };
 
@@ -30,13 +30,25 @@ function App() {
       let chatId = activeChatId;
       if (!chatId) {
         console.log("Chat ID not found");
-
         chatId = await startNewChat();
         setActiveChatId(chatId);
-        console.log("Chat ID:", chatId);
+        console.log("New Chat ID:", chatId);
+        setChats((prev) => [...prev, { id: chatId, messages: [userMessage] }]);
+      } else {
+        setChats((prev) =>
+          prev.map((chat) =>
+            chat.id === chatId
+              ? { ...chat, messages: [...chat.messages, userMessage] }
+              : chat
+          )
+        );
       }
     }
   };
+
+  useEffect(() => {
+    console.log("Updated Chats:", chats);
+  }, [chats]);
 
   return (
     <Router>
