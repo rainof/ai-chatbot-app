@@ -9,7 +9,7 @@ function App() {
   const [chats, setChats] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
 
-  const startNewChat = async () => {
+  const startNewChat = async (userMessage) => {
     console.log("[START NEW CHAT] Function");
     const response = await fetch("http://localhost:8000/new-chat", {
       method: "POST",
@@ -20,7 +20,7 @@ function App() {
     const data = await response.json();
     const chatId = data.chatId;
     setActiveChatId(chatId);
-    setChats([...chats, { id: chatId, messages: [] }]);
+    setChats([...chats, { id: chatId, messages: [userMessage] }]);
     console.log("New ID:", chatId);
     return chatId;
   };
@@ -34,10 +34,9 @@ function App() {
       let chatId = activeChatId;
       if (!chatId) {
         console.log("Chat ID not found");
-        chatId = await startNewChat();
+        chatId = await startNewChat(userMessage);
         setActiveChatId(chatId);
         console.log("New Chat ID:", chatId);
-        setChats((prev) => [...prev, { id: chatId, messages: [userMessage] }]);
       } else {
         setChats((prev) =>
           prev.map((chat) =>
