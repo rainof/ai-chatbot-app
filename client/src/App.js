@@ -10,6 +10,7 @@ function App() {
   const [activeChatId, setActiveChatId] = useState(null);
 
   const startNewChat = async () => {
+    console.log("[START NEW CHAT] Function");
     const response = await fetch("http://localhost:8000/new-chat", {
       method: "POST",
       headers: {
@@ -18,6 +19,9 @@ function App() {
     });
     const data = await response.json();
     const chatId = data.chatId;
+    setActiveChatId(chatId);
+    setChats([...chats, { id: chatId, messages: [] }]);
+    console.log("New ID:", chatId);
     return chatId;
   };
 
@@ -60,6 +64,7 @@ function App() {
               <Layout
                 chats={chats}
                 activeChatId={activeChatId}
+                setActiveChatId={setActiveChatId}
                 startNewChat={startNewChat}
                 handleSend={handleSend}
               />

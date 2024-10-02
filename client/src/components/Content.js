@@ -13,13 +13,16 @@ function Content({ chats, activeChatId }) {
       <div className="content-container"></div>
       {currentChat ? (
         <div>
+          {currentChat.id}
           {currentChat.messages.map((msg, index) => (
-            <p key={index}>{msg.prompt}</p>
+            <p key={index}>
+              {msg.sender} {msg.prompt}
+            </p>
           ))}
         </div>
       ) : (
         <div className="">
-          <p>Loading chat...</p>
+          <p>No chat</p>
         </div>
       )}
     </>
