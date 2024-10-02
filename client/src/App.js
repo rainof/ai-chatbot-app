@@ -8,6 +8,7 @@ import "./App.scss";
 function App() {
   const [chats, setChats] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
+  const [clickAdd, setClickAdd] = useState(false);
 
   const startNewChat = async (userMessage) => {
     console.log("[START NEW CHAT] Function");
@@ -32,11 +33,12 @@ function App() {
       const userMessage = { sender: "user", prompt: prompt };
       console.log("User message:", userMessage);
       let chatId = activeChatId;
-      if (!chatId) {
+      if (!chatId || clickAdd) {
         console.log("Chat ID not found");
         chatId = await startNewChat(userMessage);
         setActiveChatId(chatId);
         console.log("New Chat ID:", chatId);
+        setClickAdd(false);
       } else {
         setChats((prev) =>
           prev.map((chat) =>
@@ -66,6 +68,8 @@ function App() {
                 setActiveChatId={setActiveChatId}
                 startNewChat={startNewChat}
                 handleSend={handleSend}
+                clickAdd={clickAdd}
+                setClickAdd={setClickAdd}
               />
             }
           >

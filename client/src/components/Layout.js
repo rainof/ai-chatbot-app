@@ -9,6 +9,7 @@ function Layout({
   setActiveChatId,
   startNewChat,
   handleSend,
+  setClickAdd,
 }) {
   return (
     <>
@@ -16,6 +17,7 @@ function Layout({
         chats={chats}
         startNewChat={startNewChat}
         setActiveChatId={setActiveChatId}
+        setClickAdd={setClickAdd}
       />
       <Content chats={chats} activeChatId={activeChatId} />
       <InputField handleSend={handleSend} />

@@ -1,7 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function TopBar({ chats, startNewChat, setActiveChatId }) {
+function TopBar({ chats, startNewChat, setActiveChatId, setClickAdd }) {
+  const onAdd = () => {
+    console.log("Add button is clicked");
+    setClickAdd(true);
+  };
+
   return (
     <div>
       <h3>TopBar</h3>
@@ -17,7 +22,7 @@ function TopBar({ chats, startNewChat, setActiveChatId }) {
         </Link>
       ))}
       <Link to="/new-chat">
-        <button className="new-chat-btn" onClick={startNewChat}>
+        <button className="new-chat-btn" onClick={onAdd}>
           +
         </button>
       </Link>
