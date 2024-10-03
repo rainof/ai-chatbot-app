@@ -75,11 +75,23 @@ function App() {
           >
             <Route
               path="c/:chatId"
-              element={<Content chats={chats} activeChatId={activeChatId} />}
+              element={
+                <Content
+                  chats={chats}
+                  activeChatId={activeChatId}
+                  clickAdd={clickAdd}
+                />
+              }
             />
             <Route
               path="new-chat"
-              element={<Content chats={chats} activeChatId={activeChatId} />}
+              element={
+                <Content
+                  chats={chats}
+                  activeChatId={activeChatId}
+                  clickAdd={clickAdd}
+                />
+              }
             />
           </Route>
         </Routes>
