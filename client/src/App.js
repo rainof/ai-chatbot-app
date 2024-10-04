@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
-import Content from "./components/Content";
-
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  // useNavigate,
+} from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import ChatPage from "./pages/ChatPage";
+import NewChatPage from "./pages/NewChatPage";
 import "./App.scss";
 
 function App() {
   const [chats, setChats] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
   const [clickAdd, setClickAdd] = useState(false);
+
+  // const navigate = useNavigate();
 
   const startNewChat = async (userMessage) => {
     console.log("[START NEW CHAT] Function");
@@ -62,7 +69,7 @@ function App() {
           <Route
             path="/"
             element={
-              <Layout
+              <HomePage
                 chats={chats}
                 activeChatId={activeChatId}
                 setActiveChatId={setActiveChatId}
@@ -76,7 +83,7 @@ function App() {
             <Route
               path="c/:chatId"
               element={
-                <Content
+                <ChatPage
                   chats={chats}
                   activeChatId={activeChatId}
                   clickAdd={clickAdd}
@@ -86,7 +93,7 @@ function App() {
             <Route
               path="new-chat"
               element={
-                <Content
+                <NewChatPage
                   chats={chats}
                   activeChatId={activeChatId}
                   clickAdd={clickAdd}
