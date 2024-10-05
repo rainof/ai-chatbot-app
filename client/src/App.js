@@ -83,7 +83,7 @@ function App() {
             <Route
               path="c/:chatId"
               element={
-                <ChatPage
+                <Content
                   chats={chats}
                   activeChatId={activeChatId}
                   clickAdd={clickAdd}
@@ -93,7 +93,7 @@ function App() {
             <Route
               path="new-chat"
               element={
-                <NewChatPage
+                <Content
                   chats={chats}
                   activeChatId={activeChatId}
                   clickAdd={clickAdd}

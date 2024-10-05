@@ -2,18 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function TopBar({ chats, startNewChat, setActiveChatId, setClickAdd }) {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const onAdd = () => {
     console.log("Add button is clicked");
     setClickAdd(true);
-    // navigate("/new-chat");
+    navigate("/new-chat");
   };
 
   const handleChatClick = (chatId) => {
     setActiveChatId(chatId);
     setClickAdd(false);
-    // navigate(`c/c${chatId}`);
+    navigate(`c/c${chatId}`);
   };
 
   return (
@@ -25,7 +25,7 @@ function TopBar({ chats, startNewChat, setActiveChatId, setClickAdd }) {
           key={chat.id}
           to={`/c/${chat.id}`}
           className="chat-item"
-          onClick={() => handleChatClick(chat.id)}
+          onClick={() => setActiveChatId(chat.id)}
         >
           <div>Chat {chat.id}</div>
         </Link>
