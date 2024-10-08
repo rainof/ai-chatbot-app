@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/TopBar.scss";
+import "../styles/NavBar.scss";
 
 function TopBar({ chats, startNewChat, setActiveChatId, setClickAdd }) {
   const navigate = useNavigate();
