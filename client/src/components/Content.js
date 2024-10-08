@@ -4,15 +4,6 @@ import { useParams } from "react-router-dom";
 function Content({ chats, activeChatId }) {
   const { chatId } = useParams();
 
-  if (!chats || chats.length === 0) {
-    return (
-      <>
-        <h3>Content</h3>
-        <p>No chat data available</p>
-      </>
-    );
-  }
-
   const currentChat = chats.find(
     (chat) => chat.id === (chatId || activeChatId)
   );

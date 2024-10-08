@@ -2,11 +2,14 @@ import React from "react";
 import TopBar from "../components/TopBar";
 import Content from "../components/Content";
 import InputField from "../components/InputField";
-import { useChat } from "../hooks/useChat";
 
-function ChatPage() {
-  const { chats, activeChatId, setActiveChatId, setClickAdd, handleSend } =
-    useChat();
+function ChatPage({
+  chats,
+  activeChatId,
+  setActiveChatId,
+  setClickAdd,
+  handleSend,
+}) {
   return (
     <>
       <TopBar
