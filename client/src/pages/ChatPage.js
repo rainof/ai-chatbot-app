@@ -1,5 +1,5 @@
 import React from "react";
-import TopBar from "../components/TopBar";
+import TopBar from "../components/NavBar";
 import Content from "../components/Content";
 import InputField from "../components/InputField";
 

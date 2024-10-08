@@ -1,5 +1,5 @@
 import React from "react";
-import TopBar from "../components/TopBar";
+import TopBar from "../components/NavBar";
 import InputField from "../components/InputField";
 
 function NewPage({ chats, setClickAdd, handleSend }) {

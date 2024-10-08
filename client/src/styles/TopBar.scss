@@ -1,0 +1,21 @@
+.navbar {
+
+    .menu-toggle {
+        cursor: pointer;
+    }
+
+    .chat-nav {
+
+        .chat-links {
+
+        }
+
+        .chat-links.visible {
+            display: block;
+        }
+
+        .chat-links.hidden {
+            display: none;
+        }
+    }
+}
