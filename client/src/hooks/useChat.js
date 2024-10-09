@@ -11,7 +11,7 @@ export const useChat = () => {
   const startNewChat = async (userMessage) => {
     const response = await fetch("http://localhost:8000/new-chat", {
       method: "POST",
-      header: {
+      headers: {
         "Content-Type": "application/json",
       },
     });

@@ -22,7 +22,7 @@ app.add_middleware(
 )
 
 # Load OpenAI API key from a file and set it for API requests
-with open("openai_api_key.txt", "r") as file:
+with open("../openai_api_key.txt", "r") as file:
     api_key = file.read().strip()
 openai.api_key = api_key
 
@@ -39,12 +39,38 @@ def new_chat():
     return {"chatId": chat_id}
 
 
+# @app.get("/chats/{chat_id}")
+# def get_chat(chat_id: str):
+#     if chat_id not in chats:
+#         raise HTTPException(status_code=404, detail="Chat not found")
+
+#     print(f"Returning chat history for chat_id:", {chat_id})
+#     print("Chat:", chats[chat_id])
+
+#     return {"chatId": chat_id, "messages": chats[chat_id]}
+
 @app.get("/chats/{chat_id}")
-def get_chat(chat_id: str):
-    if chat_id not in chats:
+async def request_chatgpt(request: ChatRequestSchema):
+    if request.chatId not in chats:
         raise HTTPException(status_code=404, detail="Chat not found")
 
-    print(f"Returning chat history for chat_id:", {chat_id})
-    print("Chat:", chats(chat_id))
+    user_message = {"sender": "user", "content": request.prompt}
+    chats[request.chatId].append(user_message)
 
-    return {"chatId": chat_id, "messages": chats[chat_id]}
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a supportive assistant."},
+                {"role": "user", "content": request.prompt},
+            ],
+            max_tokens=100,
+            temperature=0.7,
+        )
+        assistant_message = {"sender": "assistant", "content": response["choices"][0]["message"]["content"].strip()}
+        chats[request.chatId].append(assistant_message)
+        print("-->", assistant_message)
+        return {"response": assistant_message["content"]}
+    except Exception as e:
+        print(f"Error communication with OpenAI: {e}")
+        raise HTTPException(status_code=500, detail="Error communicating with OpenAI")
