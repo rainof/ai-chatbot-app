@@ -8,6 +8,12 @@ function InputField({ handleSend }) {
     setPrompt("");
   };
 
+  const onKeyDown = (e) => {
+    if (e.key === "Enter") {
+      onSend();
+    }
+  };
+
   return (
     <>
       <h3>Input field</h3>
@@ -15,6 +21,7 @@ function InputField({ handleSend }) {
         type="text"
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
+        onKeyDown={onKeyDown}
         placeholder="Type a message..."
       />
       <button onClick={onSend}>Send</button>
