@@ -49,13 +49,17 @@ def new_chat():
 
 #     return {"chatId": chat_id, "messages": chats[chat_id]}
 
-@app.get("/chats/{chat_id}")
+@app.post("/chats/{chat_id}")
 async def request_chatgpt(request: ChatRequestSchema):
-    if request.chatId not in chats:
-        raise HTTPException(status_code=404, detail="Chat not found")
 
     user_message = {"sender": "user", "content": request.prompt}
-    chats[request.chatId].append(user_message)
+    if request.chatId not in chats:
+    #     raise HTTPException(status_code=404, detail="Chat not found")
+        chats[request.chatId] = [user_message]
+    else:
+        chats[request.chatId].append(user_message)
+    print(chats)
+    print("kkkkkkk")
 
     try:
         response = openai.ChatCompletion.create(
@@ -68,6 +72,8 @@ async def request_chatgpt(request: ChatRequestSchema):
             temperature=0.7,
         )
         assistant_message = {"sender": "assistant", "content": response["choices"][0]["message"]["content"].strip()}
+        print(request.chatId)
+        print(chats[request.chatId])
         chats[request.chatId].append(assistant_message)
         print("-->", assistant_message)
         return {"response": assistant_message["content"]}

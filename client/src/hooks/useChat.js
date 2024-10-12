@@ -42,14 +42,48 @@ export const useChat = () => {
           )
         );
       }
+      // console.log("Updated chats:", chats);
+      // fetchMessageById(chatId);
       navigate(`/c/${chatId}`);
     }
     console.log("Chats:", chats);
     console.log("----------");
   };
 
+  const fetchMessageById = async (chatId) => {
+    const chatToSend = chats[0];
+    console.log("Chat to send:", chatToSend);
+
+    if (chatToSend && chatToSend.id) {
+      console.log("Chat ID:", chatToSend.id);
+      console.log(
+        "Chat message:",
+        chatToSend.messages[chatToSend.messages.length - 1].prompt
+      );
+    } else {
+      console.error("chatToSend is undefined or doesn't have an id");
+    }
+
+    if (chatToSend) {
+      const body = {
+        chatId: chatToSend.id,
+        prompt: chatToSend.messages[chatToSend.messages.length - 1].prompt,
+      };
+
+      const response = await fetch(`http://localhost:8000/chats/${chatId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+      console.log("FetchMessage:", response);
+    }
+  };
+
   useEffect(() => {
     console.log("Updated chats:", chats);
+    fetchMessageById(activeChatId);
   }, [chats]);
 
   return {
