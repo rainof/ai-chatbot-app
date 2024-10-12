@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 
 function Content({ chats, activeChatId }) {
@@ -16,9 +16,18 @@ function Content({ chats, activeChatId }) {
         <div>
           {currentChat.id}
           {currentChat.messages.map((msg, index) => (
-            <p key={index}>
-              {msg.sender} {msg.prompt}
-            </p>
+            <div key={index}>
+              {/* {msg.sender} {msg.prompt} */}
+              {msg.sender === "user" ? (
+                <div>
+                  {msg.sender}---{msg.prompt}
+                </div>
+              ) : (
+                <div>
+                  {msg.sender}+++{msg.prompt}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       ) : (

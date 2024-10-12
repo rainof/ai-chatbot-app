@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const useChat = () => {
@@ -19,18 +19,21 @@ export const useChat = () => {
     const chatId = data.chatId;
     setActiveChatId(chatId);
     setChats([...chats, { id: chatId, messages: [userMessage] }]);
+    setClickAdd(false);
     return chatId;
   };
 
   const handleSend = async (prompt) => {
     if (prompt.trim()) {
-      const userMessage = { sender: "user", prompt: prompt };
+      const userMessage = { sender: "user", prompt: prompt.trim() };
+      console.log("userMessage:", userMessage);
+
       let chatId = activeChatId;
       if (!chatId || clickAdd) {
         chatId = await startNewChat(userMessage);
-        setActiveChatId(chatId);
-        setClickAdd(false);
+        console.log("New chat ID:", chatId);
       } else {
+        console.log("Existing chat ID:", chatId);
         setChats((prev) =>
           prev.map((chat) =>
             chat.id === chatId
@@ -41,7 +44,13 @@ export const useChat = () => {
       }
       navigate(`/c/${chatId}`);
     }
+    console.log("Chats:", chats);
+    console.log("----------");
   };
+
+  useEffect(() => {
+    console.log("Updated chats:", chats);
+  }, [chats]);
 
   return {
     chats,
