@@ -51,7 +51,7 @@ export const useChat = () => {
   };
 
   const fetchMessageById = async (chatId) => {
-    const chatToSend = chats[0];
+    const chatToSend = chats[chats.length - 1];
     console.log("Chat to send:", chatToSend);
 
     if (chatToSend && chatToSend.id) {
