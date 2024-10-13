@@ -4,6 +4,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from schema import ChatRequestSchema
 from uuid import uuid4
+import datetime
 
 
 # Dictionary to store chat history for each user
@@ -52,7 +53,11 @@ def new_chat():
 @app.post("/chats/{chat_id}")
 async def request_chatgpt(request: ChatRequestSchema):
 
-    user_message = {"sender": "user", "content": request.prompt}
+    user_message = {
+        "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "sender": "user",
+        "content": request.prompt
+    }
     if request.chatId not in chats:
     #     raise HTTPException(status_code=404, detail="Chat not found")
         chats[request.chatId] = [user_message]
@@ -71,11 +76,17 @@ async def request_chatgpt(request: ChatRequestSchema):
             max_tokens=100,
             temperature=0.7,
         )
-        assistant_message = {"sender": "assistant", "content": response["choices"][0]["message"]["content"].strip()}
+        assistant_message = {
+            "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "sender": "assistant",
+            "content": response["choices"][0]["message"]["content"].strip()
+        }
+        print("===")
         print(request.chatId)
-        print(chats[request.chatId])
+        print("===")
         chats[request.chatId].append(assistant_message)
-        print("-->", assistant_message)
+        print("-->", chats[request.chatId])
+        print()
         return {"response": assistant_message["content"]}
     except Exception as e:
         print(f"Error communication with OpenAI: {e}")
