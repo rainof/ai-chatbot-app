@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from schema import ChatRequestSchema
 from uuid import uuid4
 import datetime
+from collections import defaultdict as ddict
 
 
 # Dictionary to store chat history for each user
@@ -40,54 +41,47 @@ def new_chat():
     return {"chatId": chat_id}
 
 
-# @app.get("/chats/{chat_id}")
-# def get_chat(chat_id: str):
-#     if chat_id not in chats:
-#         raise HTTPException(status_code=404, detail="Chat not found")
-
-#     print(f"Returning chat history for chat_id:", {chat_id})
-#     print("Chat:", chats[chat_id])
-
-#     return {"chatId": chat_id, "messages": chats[chat_id]}
-
+# Endpoint to process user input and retrieve chat history from ChatGPT API
 @app.post("/chats/{chat_id}")
 async def request_chatgpt(request: ChatRequestSchema):
+    if request.chatId not in chats:
+        chats[request.chatId] = {"messages": []}
 
     user_message = {
+        "no": len(chats.get(request.chatId, [])) + 1,
         "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "sender": "user",
         "content": request.prompt
     }
-    if request.chatId not in chats:
-    #     raise HTTPException(status_code=404, detail="Chat not found")
-        chats[request.chatId] = [user_message]
-    else:
-        chats[request.chatId].append(user_message)
-    print(chats)
-    print("kkkkkkk")
 
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a supportive assistant."},
-                {"role": "user", "content": request.prompt},
-            ],
-            max_tokens=100,
-            temperature=0.7,
-        )
+        # response = openai.ChatCompletion.create(
+        #     model="gpt-3.5-turbo",
+        #     messages=[
+        #         {"role": "system", "content": "You are a supportive assistant."},
+        #         {"role": "user", "content": request.prompt},
+        #     ],
+        #     max_tokens=100,
+        #     temperature=0.7,
+        # )
         assistant_message = {
-            "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "no": len(chats.get(request.chatId, [])) + 2,
+            "timestamp": datetime.datetime.now(). strftime("%Y-%m-%d %H:%M:%S"),
             "sender": "assistant",
-            "content": response["choices"][0]["message"]["content"].strip()
+            # "content": response["choices"][0]["message"]["content"].strip()
+            "content": "THIS IS THE TEST"
         }
+
+        chats[request.chatId]["messages"].append(user_message)
+        chats[request.chatId]["messages"].append(assistant_message)
+
         print("===")
         print(request.chatId)
         print("===")
-        chats[request.chatId].append(assistant_message)
-        print("-->", chats[request.chatId])
         print()
-        return {"response": assistant_message["content"]}
+        print(chats)
+        print(">>>", len(chats[request.chatId]["messages"]))
+        return {"id": request.chatId, "messages": chats[request.chatId]["messages"]}
     except Exception as e:
         print(f"Error communication with OpenAI: {e}")
         raise HTTPException(status_code=500, detail="Error communicating with OpenAI")
