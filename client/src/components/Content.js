@@ -1,40 +1,40 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-function Content({ chats, activeChatId }) {
+function Content({ chats, activeChatId, updateResponse }) {
   const { chatId } = useParams();
 
-  const currentChat = chats.find(
-    (chat) => chat.id === (chatId || activeChatId)
-  );
+  const currentChat = chats.find((chat) => chat.id === activeChatId);
+
+  console.log("Updated response:", updateResponse);
 
   return (
     <>
       <h3>Content</h3>
-      <div className="content-container"></div>
-      {currentChat ? (
-        <div>
-          {currentChat.id}
-          {currentChat.messages.map((msg, index) => (
-            <div key={index}>
-              {/* {msg.sender} {msg.prompt} */}
-              {msg.sender === "user" ? (
-                <div>
-                  {msg.sender}---{msg.prompt}
-                </div>
-              ) : (
-                <div>
-                  {msg.sender}+++{msg.prompt}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="">
-          <p>No chat</p>
-        </div>
-      )}
+      <div className="content-container">
+        {updateResponse ? (
+          <div>
+            <p>Active Chat ID: {activeChatId}</p>
+            {updateResponse.map((msg, index) => (
+              <div key={index}>
+                {msg.sender === "user" ? (
+                  <div>
+                    {msg.sender}---{msg.content}
+                  </div>
+                ) : (
+                  <div>
+                    {msg.sender}+++{msg.content}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="">
+            <p>No chat</p>
+          </div>
+        )}
+      </div>
     </>
   );
 }

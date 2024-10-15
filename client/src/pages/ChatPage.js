@@ -9,6 +9,7 @@ function ChatPage({
   setActiveChatId,
   setClickAdd,
   handleSend,
+  updateResponse,
 }) {
   return (
     <>
@@ -18,7 +19,11 @@ function ChatPage({
         setActiveChatId={setActiveChatId}
         setClickAdd={setClickAdd}
       />
-      <Content chats={chats} activeChatId={activeChatId} />
+      <Content
+        chats={chats}
+        activeChatId={activeChatId}
+        updateResponse={updateResponse}
+      />
       <InputField handleSend={handleSend} setActiveChatId={setActiveChatId} />
     </>
   );

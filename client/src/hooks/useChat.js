@@ -5,6 +5,7 @@ export const useChat = () => {
   const [chats, setChats] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
   const [clickAdd, setClickAdd] = useState(false);
+  const [updateResponse, setUpdateResponse] = useState(null);
 
   const navigate = useNavigate();
 
@@ -28,8 +29,6 @@ export const useChat = () => {
       const userMessage = { sender: "user", prompt: prompt.trim() };
 
       let chatId = activeChatId;
-      console.log("--->", chatId);
-      console.log("--->", prompt);
       if (!chatId || clickAdd) {
         chatId = await startNewChat(userMessage);
       } else {
@@ -46,17 +45,14 @@ export const useChat = () => {
   };
 
   const fetchMessageById = async (chatId) => {
-    console.log("Chats:", chats);
     const chatToSend = chats.find((chat) => chat.id === chatId);
     if (chatToSend && chatToSend.messages.length > 0) {
       const message = chatToSend.messages[chatToSend.messages.length - 1];
-      console.log("Message:", message);
 
       const body = {
         chatId: chatToSend.id,
         prompt: chatToSend.messages[chatToSend.messages.length - 1].prompt,
       };
-      console.log("Body:", body);
 
       try {
         const response = await fetch(`http://localhost:8000/chats/${chatId}`, {
@@ -67,7 +63,7 @@ export const useChat = () => {
           body: JSON.stringify(body),
         });
         const data = await response.json();
-        console.log("FetchMessage:", data);
+        setUpdateResponse(data.messages);
       } catch (error) {
         console.error(
           `An error occurred while sending the message to chat ID ${chatId}:`,
@@ -78,10 +74,12 @@ export const useChat = () => {
   };
 
   useEffect(() => {
-    // console.log("Updated chats:", chats);
-    // console.log("ActiveChatId", activeChatId);
     fetchMessageById(activeChatId);
   }, [chats]);
+
+  useEffect(() => {
+    // console.log("Updated message:", updateResponse);
+  }, [updateResponse]);
 
   return {
     chats,
@@ -90,5 +88,6 @@ export const useChat = () => {
     setClickAdd,
     handleSend,
     setChats,
+    updateResponse,
   };
 };

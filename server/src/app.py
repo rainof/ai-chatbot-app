@@ -45,8 +45,6 @@ def new_chat():
 @app.post("/chats/{chat_id}")
 async def request_chatgpt(request: ChatRequestSchema):
 
-    print("--- Received prompt:", request.prompt)
-
     if request.chatId not in chats:
         chats[request.chatId] = {"messages": []}
 
@@ -78,13 +76,7 @@ async def request_chatgpt(request: ChatRequestSchema):
         chats[request.chatId]["messages"].append(user_message)
         chats[request.chatId]["messages"].append(assistant_message)
 
-        print("===")
-        print(request.chatId)
-        print("===")
-        print()
-        print(chats)
-        print(">>>", len(chats[request.chatId]["messages"]))
-        return chats
+        return {"messages": chats[request.chatId]["messages"]}
     except Exception as e:
         print(f"Error communication with OpenAI: {e}")
         raise HTTPException(status_code=500, detail="Error communicating with OpenAI")
