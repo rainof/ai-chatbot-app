@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function InputField({ handleSend }) {
+function InputField({ handleSend, setActiveChatId }) {
   const [prompt, setPrompt] = useState("");
 
   const onSend = () => {

@@ -26,63 +26,60 @@ export const useChat = () => {
   const handleSend = async (prompt) => {
     if (prompt.trim()) {
       const userMessage = { sender: "user", prompt: prompt.trim() };
-      console.log("userMessage:", userMessage);
 
       let chatId = activeChatId;
+      console.log("--->", chatId);
+      console.log("--->", prompt);
       if (!chatId || clickAdd) {
         chatId = await startNewChat(userMessage);
-        console.log("New chat ID:", chatId);
       } else {
-        console.log("Existing chat ID:", chatId);
         setChats((prev) =>
           prev.map((chat) =>
-            chat.id === chatId
+            chat.id === activeChatId
               ? { ...chat, messages: [...chat.messages, userMessage] }
               : chat
           )
         );
       }
-      // console.log("Updated chats:", chats);
-      // fetchMessageById(chatId);
       navigate(`/c/${chatId}`);
     }
-    console.log("Chats:", chats);
-    console.log("----------");
   };
 
   const fetchMessageById = async (chatId) => {
-    const chatToSend = chats[chats.length - 1];
-    console.log("Chat to send:", chatToSend);
+    console.log("Chats:", chats);
+    const chatToSend = chats.find((chat) => chat.id === chatId);
+    if (chatToSend && chatToSend.messages.length > 0) {
+      const message = chatToSend.messages[chatToSend.messages.length - 1];
+      console.log("Message:", message);
 
-    if (chatToSend && chatToSend.id) {
-      console.log("Chat ID:", chatToSend.id);
-      console.log(
-        "Chat message:",
-        chatToSend.messages[chatToSend.messages.length - 1].prompt
-      );
-    } else {
-      console.error("chatToSend is undefined or doesn't have an id");
-    }
-
-    if (chatToSend) {
       const body = {
         chatId: chatToSend.id,
         prompt: chatToSend.messages[chatToSend.messages.length - 1].prompt,
       };
+      console.log("Body:", body);
 
-      const response = await fetch(`http://localhost:8000/chats/${chatId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-      console.log("FetchMessage:", response);
+      try {
+        const response = await fetch(`http://localhost:8000/chats/${chatId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+        const data = await response.json();
+        console.log("FetchMessage:", data);
+      } catch (error) {
+        console.error(
+          `An error occurred while sending the message to chat ID ${chatId}:`,
+          error
+        );
+      }
     }
   };
 
   useEffect(() => {
-    console.log("Updated chats:", chats);
+    // console.log("Updated chats:", chats);
+    // console.log("ActiveChatId", activeChatId);
     fetchMessageById(activeChatId);
   }, [chats]);
 

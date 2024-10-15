@@ -14,11 +14,12 @@ function ChatPage({
     <>
       <TopBar
         chats={chats}
+        activeChatId={activeChatId}
         setActiveChatId={setActiveChatId}
         setClickAdd={setClickAdd}
       />
       <Content chats={chats} activeChatId={activeChatId} />
-      <InputField handleSend={handleSend} />
+      <InputField handleSend={handleSend} setActiveChatId={setActiveChatId} />
     </>
   );
 }

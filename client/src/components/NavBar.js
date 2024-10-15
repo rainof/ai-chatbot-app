@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/NavBar.scss";
 
-function TopBar({ chats, startNewChat, setActiveChatId, setClickAdd }) {
+function TopBar({ chats, activeChatId, setActiveChatId, setClickAdd }) {
   const navigate = useNavigate();
   const [isNavVisible, setIsNavVisibile] = useState(false);
 
   const onAdd = () => {
     console.log("Add button is clicked");
     setClickAdd(true);
+    setActiveChatId(null);
     navigate("/new-chat");
   };
 
@@ -39,6 +40,7 @@ function TopBar({ chats, startNewChat, setActiveChatId, setClickAdd }) {
                 </Link>
               </li>
             ))}
+            <div>ActiveChatId: {activeChatId}</div>
           </ul>
         )}
       </nav>

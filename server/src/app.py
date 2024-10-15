@@ -44,11 +44,14 @@ def new_chat():
 # Endpoint to process user input and retrieve chat history from ChatGPT API
 @app.post("/chats/{chat_id}")
 async def request_chatgpt(request: ChatRequestSchema):
+
+    print("--- Received prompt:", request.prompt)
+
     if request.chatId not in chats:
         chats[request.chatId] = {"messages": []}
 
     user_message = {
-        "no": len(chats.get(request.chatId, [])) + 1,
+        "no": len(chats[request.chatId].get("messages", [])) + 1,
         "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "sender": "user",
         "content": request.prompt
@@ -65,7 +68,7 @@ async def request_chatgpt(request: ChatRequestSchema):
         #     temperature=0.7,
         # )
         assistant_message = {
-            "no": len(chats.get(request.chatId, [])) + 2,
+            "no": len(chats[request.chatId].get("messages", [])) + 2,
             "timestamp": datetime.datetime.now(). strftime("%Y-%m-%d %H:%M:%S"),
             "sender": "assistant",
             # "content": response["choices"][0]["message"]["content"].strip()
@@ -81,7 +84,7 @@ async def request_chatgpt(request: ChatRequestSchema):
         print()
         print(chats)
         print(">>>", len(chats[request.chatId]["messages"]))
-        return {"id": request.chatId, "messages": chats[request.chatId]["messages"]}
+        return chats
     except Exception as e:
         print(f"Error communication with OpenAI: {e}")
         raise HTTPException(status_code=500, detail="Error communicating with OpenAI")
