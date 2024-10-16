@@ -10,6 +10,8 @@ function ChatPage({
   setClickAdd,
   handleSend,
   updateResponse,
+  getChatResponse,
+  fetchChatById,
 }) {
   return (
     <>
@@ -18,6 +20,8 @@ function ChatPage({
         activeChatId={activeChatId}
         setActiveChatId={setActiveChatId}
         setClickAdd={setClickAdd}
+        getChatResponse={getChatResponse}
+        fetchChatById={fetchChatById}
       />
       <Content
         chats={chats}

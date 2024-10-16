@@ -6,8 +6,6 @@ function Content({ chats, activeChatId, updateResponse }) {
 
   const currentChat = chats.find((chat) => chat.id === activeChatId);
 
-  console.log("Updated response:", updateResponse);
-
   return (
     <>
       <h3>Content</h3>

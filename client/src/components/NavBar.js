@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/NavBar.scss";
 
-function TopBar({ chats, activeChatId, setActiveChatId, setClickAdd }) {
+function TopBar({
+  chats,
+  activeChatId,
+  setActiveChatId,
+  setClickAdd,
+  getChatResponse,
+  fetchChatById,
+}) {
   const navigate = useNavigate();
   const [isNavVisible, setIsNavVisibile] = useState(false);
 
   const onAdd = () => {
-    console.log("Add button is clicked");
     setClickAdd(true);
     setActiveChatId(null);
     navigate("/new-chat");
@@ -17,10 +23,13 @@ function TopBar({ chats, activeChatId, setActiveChatId, setClickAdd }) {
     setIsNavVisibile(!isNavVisible);
   };
 
+  const handleSetActiveChatId = (id) => {
+    fetchChatById(id);
+    setActiveChatId(id);
+  };
+
   return (
     <div className="navbar">
-      {/* <h3>TopBar</h3> */}
-
       <button onClick={toggleNavVisibility} className="menu-toggle">
         ☰
       </button>
@@ -34,7 +43,7 @@ function TopBar({ chats, activeChatId, setActiveChatId, setClickAdd }) {
               <li key={chat.id}>
                 <Link
                   to={`/c/${chat.id}`}
-                  onClick={() => setActiveChatId(chat.id)}
+                  onClick={() => handleSetActiveChatId(chat.id)}
                 >
                   Chat: {chat.id}
                 </Link>

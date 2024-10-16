@@ -44,7 +44,7 @@ export const useChat = () => {
     }
   };
 
-  const fetchMessageById = async (chatId) => {
+  const getChatResponse = async (chatId) => {
     const chatToSend = chats.find((chat) => chat.id === chatId);
     if (chatToSend && chatToSend.messages.length > 0) {
       const message = chatToSend.messages[chatToSend.messages.length - 1];
@@ -55,7 +55,7 @@ export const useChat = () => {
       };
 
       try {
-        const response = await fetch(`http://localhost:8000/chats/${chatId}`, {
+        const response = await fetch(`http://localhost:8000/chats`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -73,13 +73,29 @@ export const useChat = () => {
     }
   };
 
-  useEffect(() => {
-    fetchMessageById(activeChatId);
-  }, [chats]);
+  const fetchChatById = async (chatId) => {
+    try {
+      const response = await fetch(`http://localhost:8000/fetch`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ chatId: chatId }),
+      });
+
+      const data = await response.json();
+      setUpdateResponse(data.messages);
+    } catch (error) {
+      console.error(
+        `An error occurred while sending the message to chat ID ${chatId}:`,
+        error
+      );
+    }
+  };
 
   useEffect(() => {
-    // console.log("Updated message:", updateResponse);
-  }, [updateResponse]);
+    getChatResponse(activeChatId);
+  }, [chats]);
 
   return {
     chats,
@@ -89,5 +105,7 @@ export const useChat = () => {
     handleSend,
     setChats,
     updateResponse,
+    getChatResponse,
+    fetchChatById,
   };
 };
