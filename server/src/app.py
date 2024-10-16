@@ -2,7 +2,7 @@ import openai
 import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from schema import ChatRequestSchema
+from schema import ChatRequestSchema, FetchChatSchema
 from uuid import uuid4
 import datetime
 from collections import defaultdict as ddict
@@ -42,9 +42,8 @@ def new_chat():
 
 
 # Endpoint to process user input and retrieve chat history from ChatGPT API
-@app.post("/chats/{chat_id}")
+@app.post("/chats")
 async def request_chatgpt(request: ChatRequestSchema):
-
     if request.chatId not in chats:
         chats[request.chatId] = {"messages": []}
 
@@ -52,7 +51,7 @@ async def request_chatgpt(request: ChatRequestSchema):
         "no": len(chats[request.chatId].get("messages", [])) + 1,
         "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "sender": "user",
-        "content": request.prompt
+        "content": request.prompt,
     }
 
     try:
@@ -67,10 +66,10 @@ async def request_chatgpt(request: ChatRequestSchema):
         # )
         assistant_message = {
             "no": len(chats[request.chatId].get("messages", [])) + 2,
-            "timestamp": datetime.datetime.now(). strftime("%Y-%m-%d %H:%M:%S"),
+            "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "sender": "assistant",
             # "content": response["choices"][0]["message"]["content"].strip()
-            "content": "THIS IS THE TEST"
+            "content": "THIS IS THE TEST",
         }
 
         chats[request.chatId]["messages"].append(user_message)
@@ -79,4 +78,17 @@ async def request_chatgpt(request: ChatRequestSchema):
         return {"messages": chats[request.chatId]["messages"]}
     except Exception as e:
         print(f"Error communication with OpenAI: {e}")
+        raise HTTPException(status_code=500, detail="Error communicating with OpenAI")
+
+
+@app.post("/fetch")
+def fetchChat(request: FetchChatSchema):
+    print("Hello")
+    try:
+        return {"messages": chats[request.chatId]["messages"]}
+    except KeyError:
+        raise HTTPException(
+            status_code=404, detail=f"Chat ID {request.chatId} not found"
+        )
+    except Exception as e:
         raise HTTPException(status_code=500, detail="Error communicating with OpenAI")
