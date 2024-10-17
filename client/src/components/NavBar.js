@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/NavBar.scss";
 
-function TopBar({
+function NavBar({
   chats,
+  setChats,
   activeChatId,
   setActiveChatId,
   setClickAdd,
@@ -28,6 +29,17 @@ function TopBar({
     setActiveChatId(id);
   };
 
+  const handleDeleteChat = (id) => {
+    console.log("activeChatId", activeChatId);
+    console.log("Deleted id:", id);
+    const updateChats = chats.filter((chat) => chat.id !== id);
+    setChats(updateChats);
+    setClickAdd(true);
+    if (id === activeChatId) {
+      navigate("/new-chat");
+    }
+  };
+
   return (
     <div className="navbar">
       <button onClick={toggleNavVisibility} className="menu-toggle">
@@ -47,6 +59,9 @@ function TopBar({
                 >
                   Chat: {chat.id}
                 </Link>
+                <button onClick={() => handleDeleteChat(chat.id)}>
+                  Delete
+                </button>
               </li>
             ))}
             <div>ActiveChatId: {activeChatId}</div>
@@ -62,4 +77,4 @@ function TopBar({
   );
 }
 
-export default TopBar;
+export default NavBar;

@@ -1,10 +1,11 @@
 import React from "react";
-import TopBar from "../components/NavBar";
+import NavBar from "../components/NavBar";
 import Content from "../components/Content";
 import InputField from "../components/InputField";
 
 function ChatPage({
   chats,
+  setChats,
   activeChatId,
   setActiveChatId,
   setClickAdd,
@@ -15,8 +16,9 @@ function ChatPage({
 }) {
   return (
     <>
-      <TopBar
+      <NavBar
         chats={chats}
+        setChats={setChats}
         activeChatId={activeChatId}
         setActiveChatId={setActiveChatId}
         setClickAdd={setClickAdd}

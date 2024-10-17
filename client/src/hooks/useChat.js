@@ -99,6 +99,7 @@ export const useChat = () => {
 
   return {
     chats,
+    setChats,
     activeChatId,
     setActiveChatId,
     setClickAdd,
