@@ -6,6 +6,7 @@ export const useChat = () => {
   const [activeChatId, setActiveChatId] = useState(null);
   const [clickAdd, setClickAdd] = useState(false);
   const [updateResponse, setUpdateResponse] = useState(null);
+  const [isDelete, setIsDelete] = useState(false);
 
   const navigate = useNavigate();
 
@@ -94,7 +95,12 @@ export const useChat = () => {
   };
 
   useEffect(() => {
-    getChatResponse(activeChatId);
+    if (!isDelete) {
+      getChatResponse(activeChatId);
+    }
+    setIsDelete(false);
+    console.log("isDelete", isDelete);
+    console.log("activeChatId", activeChatId);
   }, [chats]);
 
   return {
@@ -108,5 +114,6 @@ export const useChat = () => {
     updateResponse,
     getChatResponse,
     fetchChatById,
+    setIsDelete,
   };
 };

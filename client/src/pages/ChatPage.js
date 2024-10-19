@@ -13,6 +13,7 @@ function ChatPage({
   updateResponse,
   getChatResponse,
   fetchChatById,
+  setIsDelete,
 }) {
   return (
     <>
@@ -24,6 +25,7 @@ function ChatPage({
         setClickAdd={setClickAdd}
         getChatResponse={getChatResponse}
         fetchChatById={fetchChatById}
+        setIsDelete={setIsDelete}
       />
       <Content
         chats={chats}

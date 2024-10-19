@@ -10,6 +10,7 @@ function NavBar({
   setClickAdd,
   getChatResponse,
   fetchChatById,
+  setIsDelete,
 }) {
   const navigate = useNavigate();
   const [isNavVisible, setIsNavVisibile] = useState(false);
@@ -37,6 +38,7 @@ function NavBar({
     }
     const updateChats = chats.filter((chat) => chat.id !== id);
     setChats(updateChats);
+    setIsDelete(true);
   };
 
   return (
