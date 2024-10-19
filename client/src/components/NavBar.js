@@ -32,12 +32,11 @@ function NavBar({
   const handleDeleteChat = (id) => {
     console.log("activeChatId", activeChatId);
     console.log("Deleted id:", id);
-    const updateChats = chats.filter((chat) => chat.id !== id);
-    setChats(updateChats);
-    setClickAdd(true);
     if (id === activeChatId) {
       navigate("/new-chat");
     }
+    const updateChats = chats.filter((chat) => chat.id !== id);
+    setChats(updateChats);
   };
 
   return (
