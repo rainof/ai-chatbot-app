@@ -1,0 +1,26 @@
+.input-container {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 1.5rem;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: fit-content;
+
+    .input-field {
+        // flex-grow: 1;
+        width: 75vw;
+    }
+
+    .icon-style {
+        margin-left: 10px;
+        color: var(--forth-color);
+        cursor: pointer;
+        width: auto;
+    }
+
+    .icon-style:hover {
+        color: var(--third-color);
+    }
+}

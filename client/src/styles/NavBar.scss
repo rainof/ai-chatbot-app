@@ -1,7 +1,14 @@
 .navbar {
+    display: flex;
+    justify-content: space-between;
 
-    .menu-toggle {
+    .icon-style {
+        color: var(--forth-color);
         cursor: pointer;
+    }
+
+    .icon-style:hover {
+        color: var(--third-color);
     }
 
     .chat-nav {

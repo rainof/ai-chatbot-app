@@ -6,19 +6,18 @@ body {
     background: var(--forth-color);
     font-family: "Ubuntu Mono";
     color: var(--forth-color);
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 
     #root{
-
+        height: 100vh;
+        width: 100vw;
+        background-color: var(--first-color);
         .App {
-            width: 490px;
-            height: 80vh;
-            background-color: var(--first-color);
-            padding: 2rem;
             overflow-y: auto;
+            padding: 1.5rem;
         }
     }
 }

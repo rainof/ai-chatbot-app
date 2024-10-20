@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/NavBar.scss";
+import { Button } from "@mui/material";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
 function NavBar({
   chats,
@@ -43,36 +46,29 @@ function NavBar({
 
   return (
     <div className="navbar">
-      <button onClick={toggleNavVisibility} className="menu-toggle">
-        ☰
-      </button>
+      <MenuRoundedIcon
+        onClick={toggleNavVisibility}
+        className="icon-style menu-btn"
+      />
 
       <nav className="chat-nav">
-        {chats.length === 0 ? (
-          <p>No active chat yet.</p>
-        ) : (
-          <ul className={`chat-links ${isNavVisible ? "visible" : "hidden"}`}>
-            {chats.map((chat) => (
-              <li key={chat.id}>
-                <Link
-                  to={`/c/${chat.id}`}
-                  onClick={() => handleSetActiveChatId(chat.id)}
-                >
-                  Chat: {chat.id}
-                </Link>
-                <button onClick={() => handleDeleteChat(chat.id)}>
-                  Delete
-                </button>
-              </li>
-            ))}
-            <div>ActiveChatId: {activeChatId}</div>
-          </ul>
-        )}
+        <ul className={`chat-links ${isNavVisible ? "visible" : "hidden"}`}>
+          {chats.map((chat) => (
+            <li key={chat.id}>
+              <Link
+                to={`/c/${chat.id}`}
+                onClick={() => handleSetActiveChatId(chat.id)}
+              >
+                Chat: {chat.id}
+              </Link>
+              <button onClick={() => handleDeleteChat(chat.id)}>Delete</button>
+            </li>
+          ))}
+          <div>ActiveChatId: {activeChatId}</div>
+        </ul>
       </nav>
       <Link to="/new-chat">
-        <button className="new-chat-btn" onClick={onAdd}>
-          +
-        </button>
+        <AddRoundedIcon onClick={onAdd} className="icon-style add-btn" />
       </Link>
     </div>
   );
