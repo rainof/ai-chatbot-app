@@ -46,10 +46,17 @@ function NavBar({
 
   return (
     <div className="navbar">
-      <MenuRoundedIcon
-        onClick={toggleNavVisibility}
-        className="icon-style menu-btn"
-      />
+      <div className="menu-container">
+        <div>
+          <MenuRoundedIcon
+            onClick={toggleNavVisibility}
+            className="icon-style menu-btn"
+          />
+        </div>
+        <div>
+          <h3>Previous Chat</h3>
+        </div>
+      </div>
 
       <nav className="chat-nav">
         <ul className={`chat-links ${isNavVisible ? "visible" : "hidden"}`}>
