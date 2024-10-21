@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/NavBar.scss";
-import { Button } from "@mui/material";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
@@ -21,7 +20,7 @@ function NavBar({
   const onAdd = () => {
     setClickAdd(true);
     setActiveChatId(null);
-    navigate("/new-chat");
+    setIsNavVisibile(false);
   };
 
   const toggleNavVisibility = () => {
@@ -45,38 +44,40 @@ function NavBar({
   };
 
   return (
-    <div className="navbar">
-      <div className="menu-container">
+    // <div className={`nav-container ${isNavVisible ? "visible" : "hidden"}`}>
+    <div className="nav-container">
+      <div className="nav-bar">
+        <MenuRoundedIcon
+          onClick={toggleNavVisibility}
+          className="icon-style menu-btn"
+        />
+        <Link to="/new-chat">
+          <AddRoundedIcon onClick={onAdd} className="icon-style add-btn" />
+        </Link>
+      </div>
+
+      <div className={`chat-nav ${isNavVisible ? "visible" : "hidden"}`}>
         <div>
           <MenuRoundedIcon
             onClick={toggleNavVisibility}
             className="icon-style menu-btn"
           />
-        </div>
-        <div>
           <h3>Previous Chat</h3>
         </div>
-      </div>
-
-      <nav className="chat-nav">
-        <ul className={`chat-links ${isNavVisible ? "visible" : "hidden"}`}>
+        <ul className="chat-links">
           {chats.map((chat) => (
             <li key={chat.id}>
               <Link
                 to={`/c/${chat.id}`}
                 onClick={() => handleSetActiveChatId(chat.id)}
               >
-                Chat: {chat.id}
+                Chat: {chat.id.substring(0, 15) + "..."}
               </Link>
               <button onClick={() => handleDeleteChat(chat.id)}>Delete</button>
             </li>
           ))}
-          <div>ActiveChatId: {activeChatId}</div>
         </ul>
-      </nav>
-      <Link to="/new-chat">
-        <AddRoundedIcon onClick={onAdd} className="icon-style add-btn" />
-      </Link>
+      </div>
     </div>
   );
 }

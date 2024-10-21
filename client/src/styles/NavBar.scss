@@ -1,16 +1,16 @@
-.navbar {
+.nav-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    // align-items: center;
     position: relative;
+    height: 100vh;
 
-    .menu-container {
+    .nav-bar {
         display: flex;
-        align-items: center;
-        gap: 10px;
-        z-index: 1;
+        justify-content: space-between;
 
         .icon-style {
+            display: flex;
             color: var(--forth-color);
             cursor: pointer;
         }
@@ -20,33 +20,55 @@
         }
     }
 
-    .chat-nav {
+    .chat-nav.visible {
+        background-color: var(--third-color);
         position: absolute;
         top: -1.5rem;
         left: -1.5rem;
+        padding: 1.5rem;
         width: 300px;
         height: 100vh;
-        background-color: var(--third-color);
-        // transform: translateX(-200%);
-        // transition: transform 0.3s ease-in-out;
+        display: block;
+        z-index: 1;
 
-        .chat-links {
-            list-style: "⦾";
-            padding: 0;
-            margin: 0;
-            position: absolute;
-            top: 5rem;
-            left: 4rem;
+        .icon-style {
+            display: flex;
+            color: var(--forth-color);
+            cursor: pointer;
         }
 
-        .chat-links.visible {
-            display: block;
-            // transform: translateX(-100%);
-        }
-
-        .chat-links.hidden {
-            display: none;
-            // transform: translateX(0%);
+        .icon-style:hover {
+            color: var(--first-color);
         }
     }
+
+    .chat-nav.hidden {
+        display: none;
+    }
+
+    // .chat-nav {
+    //     position: absolute;
+    //     top: -1.5rem;
+    //     left: -1.5rem;
+    //     width: 300px;
+    //     height: 100vh;
+    //     background-color: var(--third-color);
+
+    //     .chat-links {
+    //         list-style: "⦾";
+    //         padding: 0;
+    //         margin: 0;
+    //         position: absolute;
+    //         top: 5rem;
+    //         left: 4rem;
+    //     }
+
+    //     .chat-links.visible {
+    //         display: block;
+    //     }
+
+    //     .chat-links.hidden {
+    //         display: none;
+    //     }
+    // }
 }

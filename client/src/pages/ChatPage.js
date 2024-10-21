@@ -16,7 +16,7 @@ function ChatPage({
   setIsDelete,
 }) {
   return (
-    <>
+    <div className="nav-content">
       <NavBar
         chats={chats}
         setChats={setChats}
@@ -27,13 +27,15 @@ function ChatPage({
         fetchChatById={fetchChatById}
         setIsDelete={setIsDelete}
       />
-      <Content
-        chats={chats}
-        activeChatId={activeChatId}
-        updateResponse={updateResponse}
-      />
-      <InputField handleSend={handleSend} setActiveChatId={setActiveChatId} />
-    </>
+      <div>
+        <Content
+          chats={chats}
+          activeChatId={activeChatId}
+          updateResponse={updateResponse}
+        />
+        <InputField handleSend={handleSend} setActiveChatId={setActiveChatId} />
+      </div>
+    </div>
   );
 }
 
