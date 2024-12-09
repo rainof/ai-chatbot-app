@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/NavBar.scss";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
@@ -44,7 +43,6 @@ function NavBar({
   };
 
   return (
-    // <div className={`nav-container ${isNavVisible ? "visible" : "hidden"}`}>
     <div className="nav-container">
       <div className="nav-bar">
         <MenuRoundedIcon

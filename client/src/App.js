@@ -3,13 +3,12 @@ import { Routes, Route } from "react-router-dom";
 import { useChat } from "./hooks/useChat";
 import NewPage from "./pages/NewPage";
 import ChatPage from "./pages/ChatPage";
-import "./App.scss";
 
 function App() {
   const chatHook = useChat();
 
   return (
-    <div className="App">
+    <div className="min-h-screen bg-gray-100">
       <Routes>
         <Route path="/" element={<NewPage {...chatHook} />} />
         <Route path="c/:chatId" element={<ChatPage {...chatHook} />} />

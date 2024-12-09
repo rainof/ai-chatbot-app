@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../styles/InputField.scss";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 
 function InputField({ handleSend, setActiveChatId }) {
@@ -24,7 +23,7 @@ function InputField({ handleSend, setActiveChatId }) {
         onChange={(e) => setPrompt(e.target.value)}
         onKeyDown={onKeyDown}
         placeholder="Type a message..."
-        className="input-field"
+        className="flex-grow"
       />
       <SendRoundedIcon onClick={onSend} className="icon-style send-btn" />
     </div>

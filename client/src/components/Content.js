@@ -1,6 +1,5 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import "../styles/Content.scss";
 
 function Content({ chats, activeChatId, updateResponse }) {
   const { chatId } = useParams();
