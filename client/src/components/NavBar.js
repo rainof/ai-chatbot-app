@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
@@ -14,6 +14,7 @@ function NavBar({
 }) {
   const navigate = useNavigate();
   const [isNavVisible, setIsNavVisibile] = useState(false);
+  const [deletedChatId, setDeletedChatId] = useState(null);
 
   const onAdd = () => {
     setClickAdd(true);
@@ -37,11 +38,22 @@ function NavBar({
   const handleDeleteChat = (id) => {
     if (id === activeChatId) {
       navigate("/new-chat");
+      setActiveChatId(null);
     }
-    const updateChats = chats.filter((chat) => chat.id !== id);
-    setChats(updateChats);
+
+    const updatedChats = chats.filter((chat) => chat.id !== id);
+    setChats(updatedChats);
+    setDeletedChatId(id);
     setIsDelete(true);
   };
+
+  useEffect(() => {
+    if (deletedChatId) {
+      console.log(`Deleted Chat ID: ${deletedChatId}`);
+      console.log("Updated chats:", chats);
+      setDeletedChatId(null);
+    }
+  }, [chats, deletedChatId]);
 
   return (
     <div className="relative">
@@ -65,7 +77,6 @@ function NavBar({
         ></div>
       )}
 
-      {/* Navigation Menu */}
       <div
         className={`chat-nav transition-transform transform ${
           isNavVisible ? "translate-x-0" : "-translate-x-full"
