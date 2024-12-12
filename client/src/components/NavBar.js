@@ -25,6 +25,10 @@ function NavBar({
     setIsNavVisibile(!isNavVisible);
   };
 
+  const closeNav = () => {
+    setIsNavVisibile(false);
+  };
+
   const handleSetActiveChatId = (id) => {
     fetchChatById(id);
     setActiveChatId(id);
@@ -40,8 +44,8 @@ function NavBar({
   };
 
   return (
-    <div className="nav-container bg-white shadow-lg">
-      <div className="nav-bar flex justify-between items-center p-4">
+    <div className="relative">
+      <div className="nav-bar flex justify-between items-center p-4 bg-white shadow-lg">
         <MenuRoundedIcon
           onClick={toggleNavVisibility}
           className="icon-style menu-btn text-gray-600 cursor-pointer"
@@ -54,6 +58,14 @@ function NavBar({
         </Link>
       </div>
 
+      {isNavVisible && (
+        <div
+          onClick={closeNav}
+          className="fixed top-0 left-0 w-full h-screen bg-black bg-opacity-50 z-40"
+        ></div>
+      )}
+
+      {/* Navigation Menu */}
       <div
         className={`chat-nav transition-transform transform ${
           isNavVisible ? "translate-x-0" : "-translate-x-full"
@@ -71,7 +83,10 @@ function NavBar({
             <li key={chat.id} className="flex justify-between items-center">
               <Link
                 to={`/c/${chat.id}`}
-                onClick={() => handleSetActiveChatId(chat.id)}
+                onClick={() => {
+                  handleSetActiveChatId(chat.id);
+                  closeNav();
+                }}
                 className="text-blue-300 hover:underline"
               >
                 Chat: {chat.id.substring(0, 15) + "..."}
