@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
@@ -9,7 +9,6 @@ function NavBar({
   activeChatId,
   setActiveChatId,
   setClickAdd,
-  getChatResponse,
   fetchChatById,
   setIsDelete,
 }) {
@@ -58,7 +57,7 @@ function NavBar({
       <div
         className={`chat-nav transition-transform transform ${
           isNavVisible ? "translate-x-0" : "-translate-x-full"
-        } fixed top-0 left-0 h-full w-64 bg-gray-800 text-white shadow-lg`}
+        } fixed top-0 left-0 h-screen w-64 bg-gray-800 text-white shadow-lg z-50`}
       >
         <div className="flex items-center justify-between p-4">
           <h3 className="text-lg font-bold">Previous Chats</h3>
