@@ -15,7 +15,7 @@ function NewPage({
   setIsDelete,
 }) {
   return (
-    <>
+    <div className="flex flex-col h-screen bg-gray-100">
       <NavBar
         chats={chats}
         setChats={setChats}
@@ -27,11 +27,15 @@ function NewPage({
         setIsDelete={setIsDelete}
       />
       {/* Blank content for a new page */}
-      <div className="content-container">
-        <p>No chats yet. Start a new conversation!</p>
+      <div className="flex flex-grow items-center justify-center text-center">
+        <p className="text-gray-500 text-lg font-medium">
+          Start a new conversation!
+        </p>
       </div>
-      <InputField handleSend={handleSend} />
-    </>
+      <div className="p-4">
+        <InputField handleSend={handleSend} />
+      </div>
+    </div>
   );
 }
 

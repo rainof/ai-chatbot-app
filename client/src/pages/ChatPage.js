@@ -16,7 +16,7 @@ function ChatPage({
   setIsDelete,
 }) {
   return (
-    <>
+    <div className="flex flex-col h-screen bg-white">
       <NavBar
         chats={chats}
         setChats={setChats}
@@ -27,15 +27,17 @@ function ChatPage({
         fetchChatById={fetchChatById}
         setIsDelete={setIsDelete}
       />
-      <div>
+      <div className="flex flex-grow">
         <Content
           chats={chats}
           activeChatId={activeChatId}
           updateResponse={updateResponse}
         />
+      </div>
+      <div className="p-4 border-t border-gray-200">
         <InputField handleSend={handleSend} setActiveChatId={setActiveChatId} />
       </div>
-    </>
+    </div>
   );
 }
 
