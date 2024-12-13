@@ -7,7 +7,7 @@ function Content({ chats, activeChatId, updateResponse }) {
   const currentChat = chats.find((chat) => chat.id === activeChatId);
 
   return (
-    <div className="content-container p-4 bg-gray-100 rounded-lg shadow-md">
+    <div className="p-4 bg-gray-100 rounded-lg shadow-md">
       {updateResponse ? (
         <div>
           <p className="text-lg font-semibold text-gray-700 mb-2">
@@ -16,13 +16,19 @@ function Content({ chats, activeChatId, updateResponse }) {
           {updateResponse.map((msg, index) => (
             <div
               key={index}
-              className={`p-2 my-2 rounded-lg ${
-                msg.sender === "user"
-                  ? "bg-blue-500 text-white"
-                  : "bg-green-500 text-white"
+              className={`flex my-2 ${
+                msg.sender === "user" ? "justify-end" : "justify-start"
               }`}
             >
-              {msg.sender}: {msg.content}
+              <div
+                className={`px-6 py-3 rounded-3xl max-w-[70%] ${
+                  msg.sender === "user"
+                    ? "bg-blue-300 text-black"
+                    : "text-black"
+                }`}
+              >
+                <span className="block w-full">{msg.content}</span>
+              </div>
             </div>
           ))}
         </div>
