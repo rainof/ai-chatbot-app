@@ -16,7 +16,7 @@ function ChatPage({
   setIsDelete,
 }) {
   return (
-    <div className="flex flex-col h-screen bg-white">
+    <div className="flex flex-col h-screen bg-gray-100">
       <NavBar
         chats={chats}
         setChats={setChats}

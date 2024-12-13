@@ -7,7 +7,7 @@ function Content({ chats, activeChatId, updateResponse }) {
   const currentChat = chats.find((chat) => chat.id === activeChatId);
 
   return (
-    <div className="p-4 bg-gray-100 rounded-lg shadow-md">
+    <div className="w-[90%] md:w-[675px] mx-auto p-4">
       {updateResponse ? (
         <div>
           <p className="text-lg font-semibold text-gray-700 mb-2">
