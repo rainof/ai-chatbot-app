@@ -7,6 +7,7 @@ export const useChat = () => {
   const [clickAdd, setClickAdd] = useState(false);
   const [updateResponse, setUpdateResponse] = useState(null);
   const [isDelete, setIsDelete] = useState(false);
+  const [chatTitle, setChatTitle] = useState(null);
 
   const navigate = useNavigate();
 
@@ -65,9 +66,35 @@ export const useChat = () => {
         });
         const data = await response.json();
         setUpdateResponse(data.messages);
+
+        try {
+          const currentChat = chats.find((chat) => chat.id === activeChatId);
+          console.log("Current Chat:", currentChat.messages.length);
+          if (currentChat.messages.length === 1) {
+            const response = await fetch(
+              `http://localhost:8000/chats/${activeChatId}/summarize`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body),
+              }
+            );
+            const data = await response.json();
+            console.log("Topic:", data.topic);
+            setChatTitle(data.topic);
+          }
+          console.log("End");
+        } catch (error) {
+          console.error(
+            "An error occurred while summarizing the chat topic",
+            error
+          );
+        }
       } catch (error) {
         console.error(
-          `An error occurred while sending the message to chat ID ${chatId}:`,
+          "An error occurred while sending the message to chat ID ${chatId}:",
           error
         );
       }
@@ -95,12 +122,14 @@ export const useChat = () => {
   };
 
   useEffect(() => {
+    console.log("Title:", chatTitle);
+  }, [chatTitle]);
+
+  useEffect(() => {
     if (!isDelete) {
       getChatResponse(activeChatId);
     }
     setIsDelete(false);
-    console.log("isDelete", isDelete);
-    console.log("activeChatId", activeChatId);
   }, [chats]);
 
   return {
@@ -115,5 +144,6 @@ export const useChat = () => {
     getChatResponse,
     fetchChatById,
     setIsDelete,
+    chatTitle,
   };
 };

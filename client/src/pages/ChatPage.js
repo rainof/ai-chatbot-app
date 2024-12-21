@@ -14,6 +14,7 @@ function ChatPage({
   getChatResponse,
   fetchChatById,
   setIsDelete,
+  chatTitle,
 }) {
   return (
     <div className="flex flex-col h-full bg-gray-100">
@@ -26,6 +27,7 @@ function ChatPage({
         getChatResponse={getChatResponse}
         fetchChatById={fetchChatById}
         setIsDelete={setIsDelete}
+        chatTitle={chatTitle}
       />
       <div className="flex flex-grow">
         <Content

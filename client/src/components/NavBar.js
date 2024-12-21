@@ -11,6 +11,7 @@ function NavBar({
   setClickAdd,
   fetchChatById,
   setIsDelete,
+  chatTitle,
 }) {
   const navigate = useNavigate();
   const [isNavVisible, setIsNavVisibile] = useState(false);
@@ -91,17 +92,33 @@ function NavBar({
         </div>
         <ul className="chat-links space-y-4 px-4">
           {chats.map((chat) => (
-            <li key={chat.id} className="flex justify-between items-center">
+            <li
+              key={chat.id}
+              className="flex justify-between items-center hover:bg-gray-900 px-3 py-2 rounded-lg"
+            >
               <Link
                 to={`/c/${chat.id}`}
                 onClick={() => {
                   handleSetActiveChatId(chat.id);
                   closeNav();
                 }}
-                className="text-blue-300 hover:underline"
               >
-                Chat: {chat.id.substring(0, 15) + "..."}
+                <span className="text-blue-300">
+                  {chatTitle ? (
+                    <>
+                      {chatTitle
+                        .substring(0, 20)
+                        .slice(0, chatTitle.substring(0, 20).length - 7)}
+                      <span className="bg-gradient-to-r from-blue-300 to-gray-800 text-transparent bg-clip-text">
+                        {chatTitle.substring(0, 20).slice(-7)}{" "}
+                      </span>
+                    </>
+                  ) : (
+                    "No title available"
+                  )}
+                </span>
               </Link>
+
               <button
                 onClick={() => handleDeleteChat(chat.id)}
                 className="text-red-400 hover:text-red-600"
