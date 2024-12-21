@@ -55,21 +55,25 @@ async def request_chatgpt(request: ChatRequestSchema):
     }
 
     try:
-        # response = openai.ChatCompletion.create(
-        #     model="gpt-3.5-turbo",
-        #     messages=[
-        #         {"role": "system", "content": "You are a supportive assistant."},
-        #         {"role": "user", "content": request.prompt},
-        #     ],
-        #     max_tokens=100,
-        #     temperature=0.7,
-        # )
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a supportive assistant."},
+                *[
+                    {"role": msg["sender"], "content": msg["content"]}
+                    for msg in chats[request.chatId]["messages"]
+                ],
+                {"role": "user", "content": request.prompt},
+            ],
+            max_tokens=100,
+            temperature=0.7,
+        )
         assistant_message = {
             "no": len(chats[request.chatId].get("messages", [])) + 2,
             "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "sender": "assistant",
-            # "content": response["choices"][0]["message"]["content"].strip()
-            "content": "THIS IS THE TEST",
+            "content": response["choices"][0]["message"]["content"].strip(),
+            # "content": "THIS IS THE TEST",
         }
 
         chats[request.chatId]["messages"].append(user_message)
