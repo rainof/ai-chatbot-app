@@ -56,8 +56,8 @@ function NavBar({
   }, [chats, deletedChatId]);
 
   return (
-    <div className="relative">
-      <div className="nav-bar flex justify-between items-center p-4 bg-white shadow-lg">
+    <div className="input-container fixed bottom-0 left-0 w-full bg-gray-100 p-4 shadow-md flex items-center relative">
+      <div className="nav-bar fixed top-0 left-0 w-full bg-white shadow-lg z-50 flex justify-between items-center p-4">
         <MenuRoundedIcon
           onClick={toggleNavVisibility}
           className="icon-style menu-btn text-gray-600 cursor-pointer"
