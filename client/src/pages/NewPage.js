@@ -1,6 +1,7 @@
 import React from "react";
 import NavBar from "../components/NavBar";
 import InputField from "../components/InputField";
+import GrayLogo from "../images/logo-gray.png";
 
 function NewPage({
   chats,
@@ -26,8 +27,10 @@ function NewPage({
         fetchChatById={fetchChatById}
         setIsDelete={setIsDelete}
       />
-      {/* Blank content for a new page */}
-      <div className="flex flex-grow items-center justify-center text-center">
+      <div className="flex flex-col flex-grow items-center justify-center text-center">
+        <div className="h-12 w-12">
+          <img src={GrayLogo} alt="Gray Logo" />
+        </div>
         <p className="text-gray-500 text-lg font-medium">
           Start a new conversation!
         </p>

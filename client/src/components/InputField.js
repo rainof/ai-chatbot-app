@@ -27,7 +27,7 @@ function InputField({ handleSend, setActiveChatId }) {
       />
       <SendRoundedIcon
         onClick={onSend}
-        className="icon-style send-btn text-blue-500 cursor-pointer ml-4"
+        className="icon-style send-btn text-gray-800 cursor-pointer ml-4"
       />
     </div>
   );
