@@ -48,56 +48,59 @@ export const useChat = () => {
 
   const getChatResponse = async (chatId) => {
     const chatToSend = chats.find((chat) => chat.id === chatId);
-    if (chatToSend && chatToSend.messages.length > 0) {
-      const message = chatToSend.messages[chatToSend.messages.length - 1];
 
-      const body = {
-        chatId: chatToSend.id,
-        prompt: chatToSend.messages[chatToSend.messages.length - 1].prompt,
-      };
+    if (
+      !chatToSend ||
+      !Array.isArray(chatToSend.messages) ||
+      chatToSend.messages.length === 0
+    ) {
+      console.error("Chat or messages not found or empty");
+      return;
+    }
+    const lastMessage = chatToSend.messages[chatToSend.messages.length - 1];
+    const body = {
+      chatId: chatToSend.id,
+      prompt: chatToSend.messages[chatToSend.messages.length - 1].prompt,
+    };
 
-      try {
-        const response = await fetch(`http://localhost:8000/chats`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        });
-        const data = await response.json();
-        setUpdateResponse(data.messages);
+    try {
+      const response = await fetch(`http://localhost:8000/chats`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
 
-        try {
-          const currentChat = chats.find((chat) => chat.id === activeChatId);
-          console.log("Current Chat:", currentChat.messages.length);
-          if (currentChat.messages.length === 1) {
-            const response = await fetch(
-              `http://localhost:8000/chats/${activeChatId}/summarize`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(body),
-              }
-            );
-            const data = await response.json();
-            console.log("Topic:", data.topic);
-            setChatTitle(data.topic);
-          }
-          console.log("End");
-        } catch (error) {
-          console.error(
-            "An error occurred while summarizing the chat topic",
-            error
-          );
-        }
-      } catch (error) {
-        console.error(
-          "An error occurred while sending the message to chat ID ${chatId}:",
-          error
-        );
+      if (!response.ok) {
+        const errorDetails = await response.json();
+        console.error(body);
+        console.error("Failed to fetch chat response:", errorDetails);
+        return;
       }
+
+      const data = await response.json();
+      setUpdateResponse(data.messages);
+
+      if (!chatTitle && data.topic) {
+        setChatTitle(data.topic);
+      }
+      setChats((prevChats) =>
+        prevChats.map((chat) =>
+          chat.id === chatId
+            ? {
+                ...chat,
+                title: data.topic || "No title",
+                messages: data.messages,
+              }
+            : chat
+        )
+      );
+    } catch (error) {
+      console.error(
+        `An error occurred while sending the message to chat ID ${chatId}:`,
+        error
+      );
     }
   };
 
@@ -126,11 +129,11 @@ export const useChat = () => {
   }, [chatTitle]);
 
   useEffect(() => {
-    if (!isDelete) {
+    if (!isDelete && activeChatId) {
       getChatResponse(activeChatId);
     }
     setIsDelete(false);
-  }, [chats]);
+  }, [chats, activeChatId, isDelete]);
 
   return {
     chats,

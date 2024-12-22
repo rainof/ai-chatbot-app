@@ -11,24 +11,23 @@ function NavBar({
   setClickAdd,
   fetchChatById,
   setIsDelete,
-  chatTitle,
 }) {
   const navigate = useNavigate();
-  const [isNavVisible, setIsNavVisibile] = useState(false);
+  const [isNavVisible, setIsNavVisible] = useState(false);
   const [deletedChatId, setDeletedChatId] = useState(null);
 
   const onAdd = () => {
     setClickAdd(true);
     setActiveChatId(null);
-    setIsNavVisibile(false);
+    setIsNavVisible(false);
   };
 
   const toggleNavVisibility = () => {
-    setIsNavVisibile(!isNavVisible);
+    setIsNavVisible(!isNavVisible);
   };
 
   const closeNav = () => {
-    setIsNavVisibile(false);
+    setIsNavVisible(false);
   };
 
   const handleSetActiveChatId = (id) => {
@@ -104,18 +103,7 @@ function NavBar({
                 }}
               >
                 <span className="text-blue-300">
-                  {chatTitle ? (
-                    <>
-                      {chatTitle
-                        .substring(0, 20)
-                        .slice(0, chatTitle.substring(0, 20).length - 7)}
-                      <span className="bg-gradient-to-r from-blue-300 to-gray-800 text-transparent bg-clip-text">
-                        {chatTitle.substring(0, 20).slice(-7)}{" "}
-                      </span>
-                    </>
-                  ) : (
-                    "No title available"
-                  )}
+                  {chat.title || "No title available"}
                 </span>
               </Link>
 
