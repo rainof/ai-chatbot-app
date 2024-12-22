@@ -62,10 +62,9 @@ async def request_chatgpt(request: ChatRequestSchema):
     dynamic_prompt = FEW_SHOT_PROMPT
 
     if request.chatId not in chats:
-        chats[request.chatId] = {"messages": []}
+        chats[request.chatId] = {"messages": [], "topic": None}
 
     dynamic_prompt += f"Q: {request.prompt}"
-    print(dynamic_prompt)
 
     user_message = {
         "no": len(chats[request.chatId].get("messages", [])) + 1,
@@ -98,46 +97,42 @@ async def request_chatgpt(request: ChatRequestSchema):
         chats[request.chatId]["messages"].append(user_message)
         chats[request.chatId]["messages"].append(assistant_message)
 
-        return {"messages": chats[request.chatId]["messages"]}
+        if chats[request.chatId]["topic"] is None:
+            try:
+                topic_response = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": "Summarize the topic of this conversation in one short sentence.",
+                        },
+                        *[
+                            {"role": msg["sender"], "content": msg["content"]}
+                            for msg in chats[request.chatId]["messages"]
+                        ],
+                    ],
+                    max_tokens=50,
+                    temperature=0.5,
+                )
+                chat_topic = topic_response["choices"][0]["message"]["content"].strip()
+                chats[request.chatId]["topic"] = chat_topic
+            except Exception as e:
+                print(f"Error summarizing chat topic: {e}")
+                raise HTTPException(
+                    status_code=500, detail="Error summarizing chat topic"
+                )
+
+        return {
+            "messages": chats[request.chatId]["messages"],
+            "topic": chats[request.chatId]["topic"],
+        }
     except Exception as e:
         print(f"Error communication with OpenAI: {e}")
         raise HTTPException(status_code=500, detail="Error communicating with OpenAI")
 
 
-@app.post("/chats/{chatId}/summarize")
-async def summarize_chat_topic(chatId: str):
-    if chatId not in chats or not chats[chatId]["messages"]:
-        raise HTTPException(
-            status_code=404, detail="Chat not found or no messages available"
-        )
-    try:
-        topic_response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "Summarize the topic of this conversation in one short sentence.",
-                },
-                *[
-                    {"role": msg["sender"], "content": msg["content"]}
-                    for msg in chats[chatId]["messages"]
-                ],
-            ],
-            max_tokens=50,
-            temperature=0.5,
-        )
-        chat_topic = topic_response["choices"][0]["message"]["content"].strip()
-        chats[chatId]["topic"] = chat_topic
-
-        return {"topic": chat_topic}
-    except Exception as e:
-        print(f"Error communicating with OpenAI: {e}")
-        raise HTTPException(status_code=500, detail="Error communicating with OpenAI")
-
-
 @app.post("/fetch")
 def fetchChat(request: FetchChatSchema):
-    print("Hello")
     try:
         return {"messages": chats[request.chatId]["messages"]}
     except KeyError:
