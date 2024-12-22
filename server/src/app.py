@@ -11,6 +11,21 @@ from collections import defaultdict as ddict
 # Dictionary to store chat history for each user
 chats = {}
 
+FEW_SHOT_PROMPT = """
+You are a reasoning assistant. Answer questions to the point without being verbose. Examples:
+
+Q: What is the capital of France?
+A: Paris.
+
+Q: Why does ice float on water?
+A: Ice is less dense than water.
+
+Q: What is 5 + 7?
+A: 12.
+
+Now, answer the following:
+"""
+
 # Initialize FastAPI application
 app = FastAPI()
 
@@ -44,8 +59,13 @@ def new_chat():
 # Endpoint to process user input and retrieve chat history from ChatGPT API
 @app.post("/chats")
 async def request_chatgpt(request: ChatRequestSchema):
+    dynamic_prompt = FEW_SHOT_PROMPT
+
     if request.chatId not in chats:
         chats[request.chatId] = {"messages": []}
+
+    dynamic_prompt += f"Q: {request.prompt}"
+    print(dynamic_prompt)
 
     user_message = {
         "no": len(chats[request.chatId].get("messages", [])) + 1,
@@ -63,7 +83,7 @@ async def request_chatgpt(request: ChatRequestSchema):
                     {"role": msg["sender"], "content": msg["content"]}
                     for msg in chats[request.chatId]["messages"]
                 ],
-                {"role": "user", "content": request.prompt},
+                {"role": "user", "content": dynamic_prompt},
             ],
             max_tokens=100,
             temperature=0.7,
@@ -73,7 +93,6 @@ async def request_chatgpt(request: ChatRequestSchema):
             "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "sender": "assistant",
             "content": response["choices"][0]["message"]["content"].strip(),
-            # "content": "THIS IS THE TEST",
         }
 
         chats[request.chatId]["messages"].append(user_message)
