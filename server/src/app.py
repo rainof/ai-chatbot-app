@@ -26,6 +26,21 @@ A: 12.
 Now, answer the following:
 """
 
+FEW_SHOT_SUMMARY = """
+You are a reasoning assistant. Summarize the conversation to the point without being verbose in one phrase. Examples:
+
+Q: What is the capital of France?
+A: Capital of France
+
+Q: Why does ice float on water?
+A: Ice Floating on Water
+
+Q: What is 5 + 7?
+A: Result of 5 + 7
+
+Now, answer the following:
+"""
+
 # Initialize FastAPI application
 app = FastAPI()
 
@@ -97,6 +112,9 @@ async def request_chatgpt(request: ChatRequestSchema):
         chats[request.chatId]["messages"].append(user_message)
         chats[request.chatId]["messages"].append(assistant_message)
 
+        dynamic_summary = FEW_SHOT_SUMMARY
+        dynamic_summary += f"Q: {request.prompt}"
+
         if chats[request.chatId]["topic"] is None:
             try:
                 topic_response = openai.ChatCompletion.create(
@@ -104,12 +122,9 @@ async def request_chatgpt(request: ChatRequestSchema):
                     messages=[
                         {
                             "role": "system",
-                            "content": "Summarize the topic of this conversation in one short sentence.",
+                            "content": "You are a supportive assistant.",
                         },
-                        *[
-                            {"role": msg["sender"], "content": msg["content"]}
-                            for msg in chats[request.chatId]["messages"]
-                        ],
+                        {"role": "user", "content": dynamic_summary},
                     ],
                     max_tokens=50,
                     temperature=0.5,
