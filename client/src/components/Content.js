@@ -25,7 +25,7 @@ function Content({ chats, activeChatId, updateResponse }) {
                 }`}
               >
                 <div
-                  className={`px-6 py-3 rounded-3xl max-w-[70%] ${
+                  className={`px-6 py-3 my-2 rounded-3xl max-w-[70%] ${
                     msg.sender === "user"
                       ? "bg-blue-300 text-black"
                       : "bg-gray-200 text-black"
