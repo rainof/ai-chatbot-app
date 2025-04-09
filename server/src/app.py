@@ -1,11 +1,9 @@
-import openai
-import os
+from openai import OpenAI
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from schema import ChatRequestSchema, FetchChatSchema
 from uuid import uuid4
 import datetime
-from collections import defaultdict as ddict
 
 
 # Dictionary to store chat history for each user
@@ -56,8 +54,8 @@ app.add_middleware(
 # Load OpenAI API key from a file and set it for API requests
 with open("../openai_api_key.txt", "r") as file:
     api_key = file.read().strip()
-openai.api_key = api_key
 
+client = OpenAI(api_key=api_key)
 
 ################################################
 # Endpoints
@@ -89,7 +87,7 @@ async def request_chatgpt(request: ChatRequestSchema):
     }
 
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a supportive assistant."},
@@ -106,7 +104,7 @@ async def request_chatgpt(request: ChatRequestSchema):
             "no": len(chats[request.chatId].get("messages", [])) + 2,
             "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "sender": "assistant",
-            "content": response["choices"][0]["message"]["content"].strip(),
+            "content": response.choices[0].message.content.strip(),
         }
 
         chats[request.chatId]["messages"].append(user_message)
@@ -117,7 +115,7 @@ async def request_chatgpt(request: ChatRequestSchema):
 
         if chats[request.chatId]["topic"] is None:
             try:
-                topic_response = openai.ChatCompletion.create(
+                topic_response = client.chat.completions.create(
                     model="gpt-3.5-turbo",
                     messages=[
                         {
@@ -129,7 +127,7 @@ async def request_chatgpt(request: ChatRequestSchema):
                     max_tokens=50,
                     temperature=0.5,
                 )
-                chat_topic = topic_response["choices"][0]["message"]["content"].strip()
+                chat_topic = topic_response.choices[0].message.content.strip()
                 chats[request.chatId]["topic"] = chat_topic
             except Exception as e:
                 print(f"Error summarizing chat topic: {e}")
