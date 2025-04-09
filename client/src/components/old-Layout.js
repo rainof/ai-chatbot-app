@@ -13,12 +13,15 @@ function Layout() {
 
   const startNewChat = async (userMessage) => {
     console.log("[START NEW CHAT] Function");
-    const response = await fetch("http://localhost:8000/new-chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      "https://ai-chatbot-fastapi-2912f5065e3c.herokuapp.com/new-chat",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await response.json();
     const chatId = data.chatId;
     setActiveChatId(chatId);
