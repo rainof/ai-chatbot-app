@@ -11,16 +11,16 @@ export const useChat = () => {
 
   const navigate = useNavigate();
 
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  console.log(BASE_URL);
+
   const startNewChat = async (userMessage) => {
-    const response = await fetch(
-      "https://ai-chatbot-fastapi-2912f5065e3c.herokuapp.com/new-chat",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}new-chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     const data = await response.json();
     const chatId = data.chatId;
     setActiveChatId(chatId);
@@ -67,16 +67,13 @@ export const useChat = () => {
     };
 
     try {
-      const response = await fetch(
-        `https://ai-chatbot-fastapi-2912f5065e3c.herokuapp.com/chats`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        }
-      );
+      const response = await fetch(`${BASE_URL}chats`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
 
       if (!response.ok) {
         const errorDetails = await response.json();
@@ -112,16 +109,13 @@ export const useChat = () => {
 
   const fetchChatById = async (chatId) => {
     try {
-      const response = await fetch(
-        `https://ai-chatbot-fastapi-2912f5065e3c.herokuapp.com/fetch`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ chatId: chatId }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}fetch`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ chatId: chatId }),
+      });
 
       const data = await response.json();
       setUpdateResponse(data.messages);
@@ -151,7 +145,6 @@ export const useChat = () => {
     setActiveChatId,
     setClickAdd,
     handleSend,
-    setChats,
     updateResponse,
     getChatResponse,
     fetchChatById,
