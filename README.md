@@ -30,6 +30,14 @@ This project is a single-page application (SPA) with routing, combining a React 
 
 - Backend deployed on Heroku
 
+### Screenshot
+
+- **User interactions**
+
+    Interactive chatbot with prompt, persistent history, and deletion feature.
+
+    ![UserInteraction](./images/ai-chatbot-demo.gif)
+
 ## 🚀 Getting Started
 
 To try the app locally or explore the code:
@@ -42,4 +50,5 @@ You'll need Node.js and Python (3.12.4) installed, along with an OpenAI API key.
 
 ## 💡 Future Improvement
 
+- Improve the reliability of message rendering
 - Add dark theme support
